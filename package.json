@@ -1,4 +1,8 @@
 {
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/xefyr675/discord-bio-links.git"
+  },
   "name": "discord-bio-links",
   "version": "1.0.0",
   "type": "module",
