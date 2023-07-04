@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "checkJs": true,
+        "esModuleInterop": true,
+        "target": "ES2022",
+        "module": "ES2022",
+        "moduleResolution": "nodenext",
+        "outDir": "./build",
+        "strictNullChecks": true
+    },
+    "include": [
+        "./code/**/*.ts"
+    ],
+    "exclude": [
+        "./node_modules"
+    ]
+}
