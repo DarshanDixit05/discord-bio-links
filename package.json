@@ -1,0 +1,20 @@
+{
+  "name": "discord-bio-links",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "launch": "tsc && node build/index.js"
+  },
+  "dependencies": {
+    "@keyv/sqlite": "^3.6.5",
+    "@types/node": "^20.3.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "keyv": "^4.5.2",
+    "undici": "^5.22.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6",
+    "@types/express": "^4.17.17"
+  }
+}
