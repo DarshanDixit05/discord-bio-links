@@ -2,8 +2,7 @@ import express, { Router } from "express";
 import { LoginAttemptManager } from "../../../../structures/LoginAttemptManager.js";
 import { createAuthUrl } from "../../../../helpers/createAuthUrl.js";
 import { cfg } from "../../../../config.js";
-import { CodifiedError } from "../../../../structures/CodifiedError.js";
-
+import { replyToRequestWithError } from "../../../../helpers/replyToRequestWithError.js";
 const router = Router();
 
 router.get("/api/auth/link", async function (req, res) {
@@ -16,7 +15,12 @@ router.get("/api/auth/link", async function (req, res) {
             loginAttempt
         });
     } catch (err) {
-        res.status(500).json(new CodifiedError("INTERNAL_UNEXPECTED_EXCEPTION"));
+        replyToRequestWithError({
+            res,
+            httpCode: 500,
+            errorCode: "UNEXPECTED_INTERNAL_EXCEPTION",
+            errorMessage: "An unexpected error occurred."
+        });
     }
 });
 
