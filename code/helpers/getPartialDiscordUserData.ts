@@ -1,4 +1,3 @@
-import { CodifiedError } from "../structures/CodifiedError.js";
 import { PartialDiscordUserObject, isPartialDiscordUserObject } from "../structures/discord/PartialDiscordUserObject.js";
 import { doRequest } from "./doRequest.js";
 
@@ -14,5 +13,5 @@ export async function getPartialDiscordUserData(accessToken: string, accessToken
     const response = await doRequest("GET", url, headers, body);
 
     if (isPartialDiscordUserObject(response)) return response;
-    throw new CodifiedError("INVALID_TOKEN", "The given token invalid/expired.");
+    throw new Error("INVALID_TOKEN");
 }

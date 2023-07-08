@@ -1,5 +1,4 @@
 import { cfg } from "../config.js";
-import { CodifiedError } from "../structures/CodifiedError.js";
 import { DiscordAccessTokenReponse, isDiscordAccessTokenResponse } from "../structures/discord/AccessTokenResponse.js";
 import { doRequest } from "./doRequest.js";
 
@@ -20,5 +19,5 @@ export async function getFreshTokenData(refreshToken: string): Promise<DiscordAc
     const response = await doRequest("POST", url, headers, body);
 
     if (isDiscordAccessTokenResponse(response)) return response;
-    throw new CodifiedError("INVALID_REFRSH_TOKEN", "The given refresh token is invalid.");
+    throw new Error("INVALID_REFRESH_TOKEN");
 }

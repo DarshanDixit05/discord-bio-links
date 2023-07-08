@@ -1,5 +1,4 @@
 import { cfg } from "../config.js";
-import { CodifiedError } from "../structures/CodifiedError.js";
 import { DiscordAccessTokenReponse, isDiscordAccessTokenResponse } from "../structures/discord/AccessTokenResponse.js";
 import { doRequest } from "./doRequest.js";
 
@@ -21,5 +20,5 @@ export async function exchangeCodeForAccessToken(code: string, redirectUri: stri
     const response = await doRequest("POST", url, headers, body);
 
     if (isDiscordAccessTokenResponse(response)) return response;
-    throw new CodifiedError("INVALID_CODE_FOR_ACCESS_TOKEN_EXCHANGE", "The given code for the access token exchange is invalid/expired.");
+    throw new Error("INVALID_CODE_FOR_ACCESS_TOKEN_EXCHANGE");
 }
