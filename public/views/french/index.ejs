@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <link rel="stylesheet" href="./../../css/reset.css">
+    <link rel="stylesheet" href="./../../css/fonts.css">
+    <link rel="stylesheet" href="./../../css/common.css">
+    <link rel="stylesheet" href="./../../css/index.css">
+
+    <script type="text/javascript" src="./../../js/modules/twemoji.min.js"></script>
+    <script type="text/javascript" src="./../../js/modules/showdown.min.js"></script>
+    <script type="text/javascript" src="./../../js/modules/dompurify.min.js"></script>
+
+    <script src="./../../js/footerStyle.js" defer></script>
+    <script src="./../../js/emojis.js" defer></script>
+    <script src="./../../js/pages/index.js" type="module" defer></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <main id="main" style="display: none;">
+        <section>
+            <h1 id="welcome"></h1>
+            <div id="your-link-text">
+                Copie et colle ce lien dans ta bio Discord
+                <a href="/" id="your-link">
+
+                </a> !
+            </div>
+
+            <div id="controls">
+                <button class="small-button" id="toggle-preview">Activer l'aperçu</button>
+            </div>
+
+
+            <textarea id="biography-input"></textarea>
+            <button id="send-button">Modifier ta bio</button>
+        </section>
+
+        <hr>
+
+        <section id="preview-section" style="display: none;">
+            <h1 id="preview-title">
+                Un petit aperçu de ta bio:
+            </h1>
+            <div id="preview"></div>
+        </section>
+    </main>
+    <div id="login" style="display: none;">
+        <button id="login-button">
+            <a href="" id="login-link">
+                <h4 id="login-prompt">Connecte-toi avec Discord!</h4>
+            </a>
+        </button>
+    </div>
+</body>
+
+<%- include('partials/footer') %>
+
+</html>

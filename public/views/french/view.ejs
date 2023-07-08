@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <link rel="stylesheet" href="./../../css/reset.css">
+    <link rel="stylesheet" href="./../../css/fonts.css">
+    <link rel="stylesheet" href="./../../css/common.css">
+    <link rel="stylesheet" href="./../../css/view.css">
+
+    <script type="text/javascript" src="./../../js/modules/showdown.min.js"></script>
+    <script type="text/javascript" src="./../../js/modules/dompurify.min.js"></script>
+    <script type="text/javascript" src="./../../js/modules/twemoji.min.js"></script>
+
+    <script src="./../../js/footerStyle.js" defer></script>
+    <script src="./../../js/emojis.js" defer></script>
+    <script src="./../../js/pages/view.js" type="module"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargement...</title>
+</head>
+
+<body>
+    <main id="main" style="display: none;">
+        <div id="controls">
+            <span id="lang-controls"></span>
+        </div>
+
+        <div id="formatted-biography-text" style="display: none;"></div>
+        <textarea id="raw-biography-text" style="display: none;"></textarea>
+        <div id="username-display"></div>
+        <br>
+        <button class="small-button" id="toggle-raw-view">Voir le texte brut</button>
+    </main>
+</body>
+
+<%- include('partials/footer') %>
+
+</html>
