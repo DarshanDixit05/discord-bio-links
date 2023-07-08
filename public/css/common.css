@@ -1,0 +1,237 @@
+html {
+    box-sizing: border-box;
+    color: #f1f2e4;
+    background-color: #01122e;
+    font-family: Poppins;
+    line-height: 150%;
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-align: center;
+}
+
+h1 {
+    font-weight: 800;
+    font-size: 2.75rem;
+    margin-top: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-weight: 800;
+    font-size: 2.2rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.8rem;
+}
+
+h3 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.8rem;
+}
+
+h4 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.6rem;
+}
+
+h5 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+}
+
+h6 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.3rem;
+}
+
+hr {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border: 2px solid #f1f2e4;
+}
+
+main {
+    display: block;
+    margin: auto;
+    width: 70%;
+}
+
+textarea {
+    background-color: #cdc;
+    border: 1px solid #f1f2e4;
+    border-radius: 0.3rem;
+    width: 100%;
+    height: 40vh;
+    resize: vertical;
+}
+
+button {
+    transition: background-color 2s ease-out;
+    box-sizing: border-box;
+    border: 1px solid black;
+    color: #01122e;
+    background-color: #f1f2e4;
+    border: 3px solid #f1f2e4;
+    padding: 0.3rem 0.5rem;
+}
+
+button:active {
+    color: #f1f2e4;
+    background-color: #01122e;
+    border: 3px solid #f1f2e4;
+}
+
+.twemoji {
+    display: inline;
+    height: 1em;
+    width: 1.2em;
+    padding-inline: 0.1em;
+    vertical-align: -0.14em;
+}
+
+.message {
+    position: fixed;
+    bottom: 8%;
+    right: 3%;
+    transition: opacity 2.5s ease-out;
+    border: none;
+    padding: 1.25rem;
+    border-radius: 0.15rem;
+    border: 1px solid #f1f2e4;
+    background: #f1f2e4;
+    color: #181515;
+}
+
+.message-success,
+.message-error {
+    font-weight: 600;
+}
+
+.message.message-success {
+    background: #38b905;
+}
+
+.message.message-error {
+    background: #f01a03;
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.prompt {
+    position: absolute;
+    border: 3px solid black;
+    width: 40%;
+    margin: 5rem auto;
+}
+
+.prompt>form {
+    margin-top: 0.5rem;
+}
+
+.prompt button {
+    margin-right: 15px;
+}
+
+button:disabled {
+    background-color: grey;
+}
+
+#controls {
+    display: flex;
+    margin-bottom: 0.8rem;
+}
+
+#controls>* {
+    border-radius: 0.1rem;
+    flex: 1 0 0;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+#controls>:first-child {
+    margin-left: 0;
+}
+
+#controls>:last-child {
+    margin-right: 0;
+}
+
+strong {
+    font-weight: 600;
+}
+
+em {
+    font-style: italic;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+.cancel {
+    background-color: #f01a03;
+}
+
+.current-flang,
+.confirm {
+    background-color: #38b905;
+}
+
+#footer {
+    position: absolute;
+}
+
+#footer>ul {
+    display: flex;
+    align-content: space-between;
+}
+
+#footer>ul>li {
+    margin: auto;
+    display: inline-block;
+}
+
+footer#footer.scrollable {
+    margin-top: 5rem;
+}
+
+footer#footer.non-scrollable {
+    position: absolute;
+    bottom: 0%;
+}
+
+footer#footer {
+    margin: 0;
+    display: block;
+    color: #181515;
+    background-color: #f1f2e4;
+    padding: 0.65rem;
+    height: auto;
+    position: absolute;
+    width: 100%;
+}
