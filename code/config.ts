@@ -29,6 +29,7 @@ export const cfg = {
         routes: resolve(__dirname, "server", "routes")
     },
     databasePaths: {
+        sessions: resolve(__dirname, "..", "db", `${envName}.sessions.sqlite`),
         loginAttempts: resolve(__dirname, "..", "db", `${envName}.logins.sqlite`),
         users: resolve(__dirname, "..", "db", `${envName}.users.sqlite`)
     }
