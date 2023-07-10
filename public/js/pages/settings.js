@@ -3,7 +3,6 @@ import { askConfirmation } from "../helpers/askConfirmation.js";
 import { displayMessage } from "../helpers/displayMessage.js";
 import { doRequest } from "../helpers/doRequest.js";
 import { handleRequestError } from "../helpers/handleRequestError.js";
-import { isValidSession } from "../helpers/isValidSession.js";
 import { getSupportedLanguageFor, getTextForLanguage } from "../languages.js";
 
 const langConfig = getSupportedLanguageFor(document.documentElement.lang);
@@ -12,11 +11,7 @@ let session;
 let user;
 
 async function login() {
-    const rawSavedSession = localStorage.getItem("session") || "null";
-    const savedSession = JSON.parse(rawSavedSession);
-
-    if (!isValidSession(savedSession)) throw new Error();
-
+    const savedSession = localStorage.getItem("session") || "";
     return savedSession;
 }
 
@@ -28,7 +23,7 @@ async function load() {
         url: "/api/users",
         method: "GET",
         headers: {
-            id: session.id
+            id: session.slice(0, session.indexOf(" "))
         },
         body: undefined
     });
@@ -47,13 +42,11 @@ async function load() {
 
 async function logout() {
     await doRequest({
-        url: "/api/users",
-        method: "PATCH",
+        url: "/api/auth/users",
+        method: "DELETE",
         headers: {
-            code: "RESET",
-            state: "RESET",
-            tempid: "RESET",
-            authorization: JSON.stringify(session)
+            type: "logout",
+            authorization: session
         },
         body: undefined
     });
@@ -64,10 +57,11 @@ async function logout() {
 
 async function deleteAccount() {
     await doRequest({
-        url: "/api/users",
+        url: "/api/auth/users",
         method: "DELETE",
         headers: {
-            authorization: JSON.stringify(session)
+            type: "delete",
+            authorization: session
         },
         body: undefined
     });

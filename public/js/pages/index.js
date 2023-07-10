@@ -3,7 +3,6 @@ import { displayMessage } from "../helpers/displayMessage.js";
 import { doRequest } from "../helpers/doRequest.js";
 import { getFocusLang, renderLangControls } from "../helpers/focusLangControls.js";
 import { handleRequestError } from "../helpers/handleRequestError.js";
-import { isValidSession } from "../helpers/isValidSession.js";
 import { markdownToHtml } from "../helpers/markdownToHtml.js";
 import { getSupportedLanguageFor, getTextForLanguage } from "../languages.js";
 
@@ -12,25 +11,11 @@ let session;
 
 const langConfig = getSupportedLanguageFor(document.documentElement.lang);
 
-/**
- * 
- * @returns {Promise<Session>}
- */
 async function login() {
-    const rawSavedSession = localStorage.getItem("session") || "null";
-    const savedSession = JSON.parse(rawSavedSession);
+    const savedSession = localStorage.getItem("session");
 
     if (savedSession) {
-        const savedSessionIsValid = isValidSession(savedSession);
-
-        if (savedSessionIsValid) {
-            displayMessage(getTextForLanguage(langConfig, "sessionLoggedIn"), "neutral");
-            return savedSession;
-        } else {
-            displayMessage(getTextForLanguage(langConfig, "expiredSession"), "neutral");
-            localStorage.clear();
-            return await login();
-        }
+        return savedSession;
     } else {
         const indexOfInterrogationMark = window.location.href.indexOf("?");
         const urlParamsSearcher = new URLSearchParams(window.location.href.slice(indexOfInterrogationMark));
@@ -38,8 +23,8 @@ async function login() {
         if (urlParamsSearcher.get("code") && urlParamsSearcher.get("state") && localStorage.getItem("tempId")) {
             // 2nd step of Discord login.
             const response = await doRequest({
-                url: "/api/users",
-                method: "PATCH",
+                url: "/api/login",
+                method: "POST",
                 headers: {
                     code: urlParamsSearcher.get("code"),
                     state: urlParamsSearcher.get("state"),
@@ -58,20 +43,16 @@ async function login() {
                 throw new Error();
             } else {
                 const { session } = await response.json();
+                console.log(session);
 
-                if (isValidSession(session)) {
-                    localStorage.setItem("session", JSON.stringify(session));
-                    displayMessage(getTextForLanguage(langConfig, "discordLoggedIn"), "neutral");
-                    return session;
-                }
-
-                localStorage.clear();
-                return await login();
+                localStorage.setItem("session", session);
+                displayMessage(getTextForLanguage(langConfig, "discordLoggedIn"), "neutral");
+                return session;
             }
         } else {
             // 1st step of Discord login.
             const response = await doRequest({
-                url: "/api/auth/link",
+                url: "/api/login/link",
                 method: "GET",
                 headers: undefined,
                 body: undefined
@@ -159,10 +140,10 @@ async function send() {
         };
 
         const response = await doRequest({
-            url: "/api/users",
+            url: "/api/auth/users",
             method: "POST",
             headers: {
-                authorization: JSON.stringify(session)
+                authorization: session
             },
             body: Object.assign(user.biographies, editedBio)
         });
@@ -185,7 +166,7 @@ async function load() {
         url: "/api/users",
         method: "GET",
         headers: {
-            id: session.id
+            id: session.slice(0, session.indexOf(" "))
         },
         body: undefined
     });
