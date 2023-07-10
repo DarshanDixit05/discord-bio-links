@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { join } from "path";
 
-const router = Router();
+const settings = Router();
 
-router.get("/settings", function (req, res) {
+settings.get("/", function (req, res) {
     const acceptedLanguages = req.acceptsLanguages().map(lang => lang.toLowerCase());
 
     for (const lang of acceptedLanguages) {
@@ -18,4 +18,4 @@ router.get("/settings", function (req, res) {
     if (!res.headersSent) res.render(join("english", "settings.ejs"));
 });
 
-export default router;
+export default settings;

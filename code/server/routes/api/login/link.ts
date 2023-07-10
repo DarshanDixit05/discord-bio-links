@@ -2,10 +2,9 @@ import express, { Router } from "express";
 import { LoginAttemptManager } from "../../../../structures/LoginAttemptManager.js";
 import { createAuthUrl } from "../../../../helpers/createAuthUrl.js";
 import { cfg } from "../../../../config.js";
-import { replyToRequestWithError } from "../../../../helpers/replyToRequestWithError.js";
-const router = Router();
+const getLink = Router();
 
-router.get("/api/auth/link", async function (req, res) {
+getLink.get("/", async function (req, res, next) {
     try {
         const loginAttempt = await LoginAttemptManager.addAttempt();
         const authUrl = createAuthUrl(cfg.client.redirectUri, loginAttempt.state, ["identify"]);
@@ -15,13 +14,8 @@ router.get("/api/auth/link", async function (req, res) {
             loginAttempt
         });
     } catch (err) {
-        replyToRequestWithError({
-            res,
-            httpCode: 500,
-            errorCode: "UNEXPECTED_INTERNAL_EXCEPTION",
-            errorMessage: "An unexpected error occurred."
-        });
+        next(err);
     }
 });
 
-export default router;
+export default getLink; 

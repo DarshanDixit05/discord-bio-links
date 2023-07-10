@@ -2,25 +2,21 @@ import express, { Router } from "express";
 import { resolve } from "path";
 import { cfg } from "../../config.js";
 import { join } from "path";
-import rateLimit from 'express-rate-limit'
+import view from "./view.js";
+import settings from "./settings.js";
+import ip from "./ip.js";
+import guide from "./guide.js";
+import api from "./api/api.js";
+import index from "./index.js";
 
-const router = Router();
+const rootRoute = Router();
 
-router.use("/", express.static(resolve(cfg.directories.public)));
+rootRoute.use("/", express.static(resolve(cfg.directories.public)), index);
 
-router.get("/", function (req, res) {
-    const acceptedLanguages = req.acceptsLanguages().map(lang => lang.toLowerCase());
+rootRoute.use("/api", api);
+rootRoute.use("/guide", guide);
+rootRoute.use("/ip", ip);
+rootRoute.use("/settings", settings);
+rootRoute.use("/view", view);
 
-    for (const lang of acceptedLanguages) {
-        if (!res.headersSent) {
-            if (lang.includes("fr")) {
-                res.render(join("french", "index.ejs"));
-            }
-        }
-    }
-
-    // Fallback language: English
-    if (!res.headersSent) res.render(join("english", "index.ejs"));
-});
-
-export default router;
+export default rootRoute;

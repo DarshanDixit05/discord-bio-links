@@ -1,21 +1,21 @@
 import { Router } from "express";
 import { join } from "path";
 
-const guide = Router();
+const index = Router();
 
-guide.get("/", function (req, res) {
+index.get("/", function (req, res) {
     const acceptedLanguages = req.acceptsLanguages().map(lang => lang.toLowerCase());
 
     for (const lang of acceptedLanguages) {
         if (!res.headersSent) {
             if (lang.includes("fr")) {
-                res.render(join("french", "guide.ejs"));
+                res.render(join("french", "index.ejs"));
             }
         }
     }
 
     // Fallback language: English
-    if (!res.headersSent) res.render(join("english", "guide.ejs"));
+    if (!res.headersSent) res.render(join("english", "index.ejs"));
 });
 
-export default guide;
+export default index;

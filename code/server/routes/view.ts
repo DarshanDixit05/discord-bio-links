@@ -3,9 +3,9 @@ import { cfg } from "../../config.js";
 import { isValidDiscordId } from "../../helpers/isValidDiscordId.js";
 import { join } from "path";
 
-const router = Router();
+const view = Router();
 
-router.get("/view/:id", function (req, res) {
+view.get("/view/:id", function (req, res) {
     const acceptedLanguages = req.acceptsLanguages().map(lang => lang.toLowerCase());
 
     for (const lang of acceptedLanguages) {
@@ -24,4 +24,4 @@ router.get("/view/:id", function (req, res) {
     );
 });
 
-export default router;
+export default view;

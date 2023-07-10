@@ -1,5 +1,5 @@
 import { Router } from "express";
-const router = Router();
+const ip = Router();
 
 /*
 From https://www.npmjs.com/package/express-rate-limit
@@ -21,8 +21,16 @@ If it matches your public IP address, then the number of proxies is correct and 
 If not, then keep increasing the number until it does.
 "
 */
-router.get("/ip", function (req, res) {
-    res.json({ ip: req.ip });
+// ip.get("/", function (req, res) {
+//     res.json({ ip: req.ip });
+// });
+
+ip.get("/", function (req, res, next) {
+    try {
+        throw new Error("");
+    } catch (err) {
+        next(err);
+    }
 });
 
-export default router;
+export default ip;
