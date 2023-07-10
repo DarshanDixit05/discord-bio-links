@@ -2,7 +2,7 @@ import { cfg } from "../config.js";
 import { PartialDiscordUserObject, isPartialDiscordUserObject } from "../structures/discord/PartialDiscordUserObject.js";
 import { doRequest } from "./doRequest.js";
 
-export async function revokeToken(accessToken: string): Promise<unknown> {
+export async function revokeToken(accessToken: string): Promise<void> {
     const url = "https://discord.com/api/oauth2/token/revoke";
 
     const headers = {
@@ -15,8 +15,5 @@ export async function revokeToken(accessToken: string): Promise<unknown> {
         "token": accessToken
     }).toString();
 
-    const response = await doRequest("POST", url, headers, body);
-    console.log(response);
-
-    return response;
+    await doRequest("POST", url, headers, body)
 }
