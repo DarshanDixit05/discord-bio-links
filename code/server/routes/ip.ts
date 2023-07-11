@@ -21,16 +21,8 @@ If it matches your public IP address, then the number of proxies is correct and 
 If not, then keep increasing the number until it does.
 "
 */
-// ip.get("/", function (req, res) {
-//     res.json({ ip: req.ip });
-// });
-
-ip.get("/", function (req, res, next) {
-    try {
-        throw new Error("");
-    } catch (err) {
-        next(err);
-    }
+ip.get("/", function (req, res) {
+    res.json({ ip: req.ip });
 });
 
 export default ip;
