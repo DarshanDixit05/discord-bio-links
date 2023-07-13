@@ -6,5 +6,6 @@
 
 #raw-biography-text {
     margin-top: 3rem;
-    height: auto;
+    height: fit-content;
+    min-height: 75px;
 }

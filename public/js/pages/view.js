@@ -83,6 +83,7 @@ function displayBio(user) {
     if (formattedDisplay && rawDisplay && rawDisplay instanceof HTMLTextAreaElement) {
         rawDisplay.value = user.biographies[FocusLangManager.getFocusLang()].text;
         renderMarkdown(formattedDisplay, user.biographies[FocusLangManager.getFocusLang()].text, 1);
+        adjustRawDisplayHeight();
     }
 }
 
@@ -123,6 +124,14 @@ function loadLanguageControls(user) {
 
             controls.appendChild(button);
         }
+    }
+}
+
+function adjustRawDisplayHeight() {
+    const rawDisplay = document.getElementById("raw-biography-text");
+    if (rawDisplay) {
+        rawDisplay.style.height = "auto";
+        rawDisplay.style.height = `${rawDisplay.scrollHeight + 15}px`;
     }
 }
 
