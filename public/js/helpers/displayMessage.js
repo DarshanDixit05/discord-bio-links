@@ -1,46 +1,28 @@
-import { getTextForLanguage, getSupportedLanguageFor } from "../languages.js";
-
 // @ts-check
-const langConfig = getSupportedLanguageFor(document.documentElement.lang);
-const messages = [];
 
 /**
+ * Displays a message to the user.
+ * The "fatal" type will remove the entire document and only display the error message.
  * 
- * @param {string} message 
- * @param {"success" | "neutral" | "error" | "fatal"} type
- * @param {boolean} permanent
+ * @param {string} message
+ * @param {"success"|"neutral"|"error"|"fatal"} type
  */
-export function displayMessage(message, type, permanent = false) {
-    console.log(`[${type.toUpperCase()}] ${message}`);
+export function displayMessage(message, type) {
     if (type === "fatal") {
-        localStorage.clear();
-
-        document.documentElement.innerHTML =
-            `<div id="message" style="display: block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">${message}\n<a href="/">${getTextForLanguage(langConfig, "backToMainPage")}</a></div>`;
-
-        return document.getElementById("message");
+        document.body.innerHTML = `<div style="padding: 0.8rem; background-color: white; color: black; font-size: 1.5rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">${message}</div>`;
     } else {
-        const messageBox = document.createElement("div");
-        messageBox.innerText = message;
-        messageBox.className = `message message-${type}`;
+        const otherBoxes = document.getElementsByClassName("message");
 
-        for (const message of messages) {
-            // Who cares about catching errors?
-            try { document.body.removeChild(message) } catch (err) { }
-        };
-
-        document.body.appendChild(messageBox);
-        messages.push(messageBox);
-
-        if (!permanent) {
-            setTimeout(() => {
-                messageBox.style.opacity = "0";
-                setTimeout(() => {
-                    try { document.body.removeChild(messageBox) } catch (err) { }
-                }, 3_000);
-            }, 7_500);
+        for (const otherBox of otherBoxes) {
+            try { document.body.removeChild(otherBox); } catch (err) { console.error(err); }
         }
 
-        return messageBox;
+        const box = document.createElement("div");
+        box.className = `message message-${type}`;
+        box.innerText = message;
+
+        setTimeout(function () { try { box.style.opacity = "0"; } catch (err) { console.error(err); } }, 8_000);
+
+        document.body.appendChild(box);
     }
 }
