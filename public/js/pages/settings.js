@@ -1,97 +1,104 @@
 // @ts-check
-import { askConfirmation } from "../helpers/askConfirmation.js";
+import { TranslationManager } from "../helpers/TranslationManager.js";
+import { clearCookie } from "../helpers/clearCookie.js";
 import { displayMessage } from "../helpers/displayMessage.js";
-import { doRequest } from "../helpers/doRequest.js";
-import { handleRequestError } from "../helpers/handleRequestError.js";
-import { getSupportedLanguageFor, getTextForLanguage } from "../languages.js";
+import { fetchSession } from "../helpers/fetchSession.js";
+import { request } from "../helpers/request.js";
+import { isUser } from "../types/User.js";
+import { confirm } from "../helpers/confirm.js";
 
-const langConfig = getSupportedLanguageFor(document.documentElement.lang);
+/**
+ * @typedef {import("../types/User.js").User} User
+ */
 
-let session;
-let user;
+/**
+ * Handles a request error.
+ * @param {any} err
+ */
+async function handleRequestError(err) {
+    console.log(err);
 
-async function login() {
-    const savedSession = localStorage.getItem("session") || "";
-    return savedSession;
-}
-
-async function load() {
-    console.group(`Loading...`);
-    session = await login();
-
-    const response = await doRequest({
-        url: "/api/users",
-        method: "GET",
-        headers: {
-            id: session.slice(0, session.indexOf(" "))
-        },
-        body: undefined
-    });
-
-    if (response.status !== 200) throw new Error();
-
-    user = (await response.json()).user;
-
-    console.log(`Loaded user:`);
-    console.dir(user);
-    console.log(`Loaded session:`);
-    console.dir(session);
-
-    console.groupEnd();
-}
-
-async function logout() {
-    await doRequest({
-        url: "/api/auth/users",
-        method: "DELETE",
-        headers: {
-            type: "logout",
-            authorization: session
-        },
-        body: undefined
-    });
-
-    localStorage.clear();
-    setTimeout(() => window.location.href = "/", 3_000);
-}
-
-async function deleteAccount() {
-    await doRequest({
-        url: "/api/auth/users",
-        method: "DELETE",
-        headers: {
-            type: "delete",
-            authorization: session
-        },
-        body: undefined
-    });
-
-    localStorage.clear();
-    setTimeout(() => window.location.href = "/", 3_000);
-}
-
-async function main() {
     try {
-        await load();
+        if (err instanceof Response) {
+            if (err.status === 429) {
+                const translation = await TranslationManager.fetchTranslation("rate limited", "errors");
+                if (translation) return displayMessage(translation.translation, "fatal");
+            }
+        }
+
+        const translation = await TranslationManager.fetchTranslation("unknown", "errors");
+        if (translation) return displayMessage(translation.translation, "fatal");
+
+        throw new Error();
     } catch (err) {
-        return displayMessage(getTextForLanguage(langConfig, "expiredSession"), "fatal");
+        console.error(err);
+        displayMessage("An unknown fatal error occurred.", "fatal");
+    }
+}
+
+function setupLogoutButton() {
+    const logout = document.getElementById("logout");
+
+    if (logout) {
+        logout.addEventListener("click", async function () {
+            const res = await request({
+                url: "/api/auth/users/logout",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: {}
+            }).catch(err => handleRequestError(err));
+
+            // aka, the res body is empty
+            if (Object.keys(res).length === 0) {
+                const translation = await TranslationManager.fetchTranslation("logged out", "settings");
+                if (translation) displayMessage(translation.translation, "success");
+            }
+        });
+    }
+}
+
+function setupDeleteButton() {
+    async function deleteAcc() {
+        const res = await request({
+            url: "/api/auth/users",
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: {}
+        }).catch(err => handleRequestError(err));
+
+        // aka, the res body is empty
+        if (Object.keys(res).length === 0) {
+            const translation = await TranslationManager.fetchTranslation("deleted", "settings");
+            if (translation) displayMessage(translation.translation, "success");
+        }
     }
 
-    const main = document.getElementById("main");
-    const logoutButton = document.getElementById("logout");
     const deleteButton = document.getElementById("delete");
 
-    if (!main || !logoutButton || !deleteButton) throw new Error();
+    if (deleteButton) {
+        deleteButton.addEventListener("click", async function () {
+            const confirmationTranslation = await TranslationManager.fetchTranslation("confirm delete", "settings");
+            const yesTranslation = await TranslationManager.fetchTranslation("yes", "common");
+            const noTranslation = await TranslationManager.fetchTranslation("no", "common");
 
-    logoutButton.addEventListener("click", function () {
-        askConfirmation(getTextForLanguage(langConfig, "logoutConfirmation"), logout, () => 0)
-    });
-
-    deleteButton.addEventListener("click", function () {
-        askConfirmation(getTextForLanguage(langConfig, "deleteConfirmation"), deleteAccount, () => 0);
-    });
-
-    main.style.display = "block";
+            if (confirmationTranslation && yesTranslation && noTranslation) {
+                confirm(
+                    confirmationTranslation.translation,
+                    yesTranslation.translation,
+                    noTranslation.translation,
+                    deleteAcc,
+                    () => null
+                );
+            }
+        });
+    }
 }
 
-window.addEventListener("DOMContentLoaded", main);
+window.addEventListener("DOMContentLoaded", async function () {
+    setupLogoutButton();
+    setupDeleteButton();
+});

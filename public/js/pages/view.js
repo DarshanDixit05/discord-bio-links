@@ -1,97 +1,135 @@
-//@ts-check
-import { doRequest } from "../helpers/doRequest.js";
-import { getFocusLang, renderLangControls } from "../helpers/focusLangControls.js";
-import { handleRequestError } from "../helpers/handleRequestError.js";
-import { markdownToHtml } from "../helpers/markdownToHtml.js";
-import { getSupportedLanguageFor, getTextForLanguage } from "../languages.js";
+// @ts-check
 
-const langConfig = getSupportedLanguageFor(document.documentElement.lang);
+/**
+ * @typedef {import('./../types/User.js').User} User
+ */
 
-let user;
 
-function isRawViewOn() {
-    const isOn = localStorage.getItem("raw");
-    return (isOn === "yes");
-}
+import { TranslationManager } from "../helpers/TranslationManager.js";
+import { displayMessage } from "../helpers/displayMessage.js";
+import { getCountryFlagFor } from "../helpers/getCountryFlagFor.js";
+import { renderMarkdown } from "../helpers/renderMarkdown.js";
+import { request } from "../helpers/request.js";
+import { isUser } from "../types/User.js";
 
-function toggleRawView() {
-    const formattedContainer = document.getElementById("formatted-biography-text");
-    const rawContainer = document.getElementById("raw-biography-text");
+/**
+ * Fetches the user with the ID specified in the URL.
+ * @returns {Promise<User|null>}
+ */
+async function getUser() {
+    const userId = window.location.pathname.split("/view/")[1];
 
-    if (isRawViewOn()) {
-        localStorage.setItem("raw", "no");
-        if (formattedContainer) formattedContainer.style.display = "block";
-        if (rawContainer) rawContainer.style.display = "none";
+    try {
+        const res = await request({
+            method: "GET",
+            url: "/api/users",
+            headers: {
+                id: userId
+            },
+            body: undefined
+        });
 
-    } else {
-        localStorage.setItem("raw", "yes");
-        if (formattedContainer) formattedContainer.style.display = "none";
-        if (rawContainer) rawContainer.style.display = "block";
+        if (!isUser(res.user)) throw new Error();
+        return res.user;
+    } catch (err) {
+        console.error(err);
+        return null;
     }
-
-    displayBio();
 }
 
-function displayBio() {
-    const bioToDisplay = user.biographies[getFocusLang()] || user.biographies.us;
+/**
+ * Creates and adds the event listener for the "Toggle raw view on/off" button.
+ */
+function loadRawToggler() {
+    let isRawViewOn = false;
 
-    if (isRawViewOn()) {
-        const rawContainer = document.getElementById("raw-biography-text");
+    async function mini() {
+        isRawViewOn = !isRawViewOn;
 
-        if (rawContainer && rawContainer instanceof HTMLTextAreaElement) {
-            rawContainer.value = bioToDisplay.text;
+        const rawViewToggler = document.getElementById("toggle-raw-view");
+        const rawDisplay = document.getElementById("raw-biography-text");
+        const formattedDisplay = document.getElementById("formatted-biography-text");
+
+        if (rawViewToggler && rawDisplay && formattedDisplay) {
+            if (!isRawViewOn) {
+                const translation = await TranslationManager.fetchTranslation("turn raw view on", "view");
+                if (translation) rawViewToggler.innerText = translation.translation;
+
+                rawDisplay.style.display = "none";
+                formattedDisplay.style.display = "block";
+            } else {
+                const translation = await TranslationManager.fetchTranslation("turn raw view off", "view");
+                if (translation) rawViewToggler.innerText = translation.translation;
+
+                rawDisplay.style.display = "block";
+                formattedDisplay.style.display = "none";
+            }
         }
-    } else {
-        const formattedContainer = document.getElementById("formatted-biography-text");
-        if (formattedContainer) formattedContainer.innerHTML = markdownToHtml("live", bioToDisplay.text);
+    }
+
+    const rawViewToggler = document.getElementById("toggle-raw-view");
+    if (rawViewToggler) rawViewToggler.addEventListener("click", mini);
+}
+
+/**
+ * Loads the language controllers that will affect which biography is displayed.
+ * @param {User} user 
+ * @param {string} focusLang 
+ */
+function loadLanguageControls(user, focusLang) {
+    const controls = document.getElementById("controls");
+    const languageCodes = Object.keys(user.biographies).map(k => k.toLowerCase());
+
+    if (controls) {
+        focusLang = languageCodes[0];
+
+        for (const code of languageCodes) {
+            const flag = getCountryFlagFor(code);
+
+            const button = document.createElement("button");
+            button.innerText = flag;
+            button.className = `lang-control small-button`;
+
+            if (code === focusLang) button.className = `lang-control small-button current-flang`;
+
+            button.addEventListener("click", function () {
+                if (code === "us") console.log(`🇺🇸🦅🇺🇸🦅🇺🇸🦅 WHAT THE FUCK IS A KILOMETER?`);
+                if (code === "fr") console.log(`🇫🇷🥖🇫🇷🥖🇫🇷🥖 Oh mon dieu, les gens qui parlent le français, ils ont tellement de charisme!`);
+
+                focusLang = code;
+
+                if (controls) {
+                    for (const child of controls.children) {
+                        child.className = `lang-control small-button`;
+                    }
+                }
+
+                button.className = `lang-control small-button current-flang`;
+
+                const rawDisplay = document.getElementById("raw-biography-text");
+                const formattedDisplay = document.getElementById("formatted-biography-text");
+
+                if (formattedDisplay && rawDisplay && rawDisplay instanceof HTMLTextAreaElement) {
+                    rawDisplay.value = user.biographies[focusLang].text;
+                    renderMarkdown(formattedDisplay, user.biographies[focusLang].text, 1);
+                }
+            });
+
+            controls.appendChild(button);
+        }
     }
 }
 
-async function load() {
-    console.group(`Loading...`);
+window.addEventListener("DOMContentLoaded", async function () {
+    let focusLang = "us";
+    const user = await getUser();
 
-    const id = window.location.href.slice(window.location.href.indexOf("/view/") + "/view/".length);
+    if (!user) {
+        const translation = await TranslationManager.fetchTranslation("user not found", "errors");
+        if (translation) displayMessage(translation.translation, "fatal");
+        return;
+    }
 
-    const response = await doRequest({
-        url: "/api/users",
-        method: "GET",
-        headers: {
-            id
-        },
-        body: undefined
-    });
-
-    if (response.status !== 200) return handleRequestError(response, langConfig);
-
-    user = (await response.json()).user;
-
-    console.log(`Loaded user:`);
-    console.dir(user);
-    console.groupEnd();
-}
-
-async function main() {
-    await load();
-
-    const main = document.getElementById("main");
-    const rawViewToggle = document.getElementById("toggle-raw-view");
-    const langControlsContainer = document.getElementById("lang-controls");
-
-    if (!rawViewToggle || !main || !langControlsContainer) throw new Error();
-
-    renderLangControls(langControlsContainer, displayBio, ...Object.keys(user.biographies));
-    rawViewToggle.addEventListener("click", toggleRawView);
-
-    // Both the formatted and raw views are hidden by default.
-    // This will only display the correct one without whether or not the raw view was hidden or not.
-    // Also, the view assumes that the raw view is toggled off, which may not always be true.
-    // This ensures the correct text is shown.
-    toggleRawView();
-    toggleRawView();
-
-    displayBio();
-
-    main.style.display = "block";
-}
-
-window.addEventListener("DOMContentLoaded", main);
+    loadLanguageControls(user, focusLang);
+    loadRawToggler();
+});

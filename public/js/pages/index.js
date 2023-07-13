@@ -1,222 +1,179 @@
 // @ts-check
+import { TranslationManager } from "../helpers/TranslationManager.js";
+import { renderMarkdown } from "../helpers/renderMarkdown.js";
+import { getCountryFlagFor } from "../helpers/getCountryFlagFor.js";
+import { request } from "../helpers/request.js";
 import { displayMessage } from "../helpers/displayMessage.js";
-import { doRequest } from "../helpers/doRequest.js";
-import { getFocusLang, renderLangControls } from "../helpers/focusLangControls.js";
-import { handleRequestError } from "../helpers/handleRequestError.js";
-import { markdownToHtml } from "../helpers/markdownToHtml.js";
-import { getSupportedLanguageFor, getTextForLanguage } from "../languages.js";
+import { fetchLoggedInUser } from "../helpers/fetchLoggedInUser.js";
 
-let user;
-let session;
+/**
+* @typedef {import('./../types/User.js').User} User
+*/
 
-const langConfig = getSupportedLanguageFor(document.documentElement.lang);
+/**
+ * Handles a request error.
+ * @param {any} err
+ */
+async function handleRequestError(err) {
+    console.log(err);
 
-async function login() {
-    const savedSession = localStorage.getItem("session");
-
-    if (savedSession) {
-        return savedSession;
-    } else {
-        const indexOfInterrogationMark = window.location.href.indexOf("?");
-        const urlParamsSearcher = new URLSearchParams(window.location.href.slice(indexOfInterrogationMark));
-
-        if (urlParamsSearcher.get("code") && urlParamsSearcher.get("state") && localStorage.getItem("tempId")) {
-            // 2nd step of Discord login.
-            const response = await doRequest({
-                url: "/api/login",
-                method: "POST",
-                headers: {
-                    code: urlParamsSearcher.get("code"),
-                    state: urlParamsSearcher.get("state"),
-                    tempid: localStorage.getItem("tempId")
-                },
-                body: undefined
-            });
-
-            if (response.status !== 200) {
-                if (response.status === 422) {
-                    localStorage.clear();
-                    window.location.href = "/";
-                }
-
-                handleRequestError(response, langConfig);
-                throw new Error();
-            } else {
-                const { session } = await response.json();
-                console.log(session);
-
-                localStorage.setItem("session", session);
-                displayMessage(getTextForLanguage(langConfig, "discordLoggedIn"), "neutral");
-                return session;
-            }
-        } else {
-            // 1st step of Discord login.
-            const response = await doRequest({
-                url: "/api/login/link",
-                method: "GET",
-                headers: undefined,
-                body: undefined
-            });
-
-            if (response.status !== 200) {
-                handleRequestError(response, langConfig);
-            } else {
-                const { authUrl, loginAttempt } = await response.json();
-
-                const loginSection = document.getElementById("login");
-                const loginLinkTag = document.getElementById("login-link");
-
-                if (!loginSection || !loginLinkTag || !(loginLinkTag instanceof HTMLAnchorElement)) throw new Error();
-
-                localStorage.setItem("tempId", loginAttempt.id);
-                loginLinkTag.href = authUrl;
-                loginSection.style.display = "block";
+    try {
+        if (err instanceof Response) {
+            if (err.status === 429) {
+                const translation = await TranslationManager.fetchTranslation("rate limited", "errors");
+                if (translation) return displayMessage(translation.translation, "fatal");
             }
         }
-    }
 
-    throw new Error();
-}
+        const translation = await TranslationManager.fetchTranslation("unknown", "errors");
+        if (translation) return displayMessage(translation.translation, "fatal");
 
-function displayBio() {
-    const bioToDisplay = user.biographies[getFocusLang()] || user.biographies.us;
-    const displayArea = document.getElementById("biography-input");
-
-    if (displayArea && displayArea instanceof HTMLTextAreaElement) {
-        displayArea.value = "";
-        setTimeout(() => {
-            if (bioToDisplay.text.trim() === "") displayArea.value = `# ${user.displayName}`;
-            else displayArea.value = bioToDisplay.text.replaceAll("\n<br>", "\n\n");
-            displayPreview();
-        }, 300);
+        throw new Error();
+    } catch (err) {
+        console.error(err);
+        displayMessage("An unknown fatal error occurred.", "fatal");
     }
 }
 
-function isPreviewOn() {
-    const isOn = localStorage.getItem("preview");
-    return (isOn === "yes");
-}
+/**
+ * Creates and adds the event listener for the "Toggle preview on/off" button.
+ */
+function loadPreviewToggler() {
+    let isPreviewOn = false;
 
-function togglePreview() {
-    const togglePreviewButton = document.getElementById("toggle-preview");
-    const previewSection = document.getElementById("preview-section");
-
-    if (isPreviewOn()) {
-        localStorage.setItem("preview", "no");
-        if (previewSection) previewSection.style.display = "none";
-        if (togglePreviewButton) togglePreviewButton.innerText = getTextForLanguage(langConfig, "enablePreview");
-    } else {
-        localStorage.setItem("preview", "yes");
-        if (previewSection) previewSection.style.display = "block";
-        if (togglePreviewButton) togglePreviewButton.innerText = getTextForLanguage(langConfig, "disablePreview");
-
+    async function mini() {
+        const previewToggler = document.getElementById("toggle-preview");
         const input = document.getElementById("biography-input");
+        const previewSection = document.getElementById("preview-section");
 
-        if (input && input instanceof HTMLTextAreaElement) input.oninput = displayPreview;
-    }
+        if (previewToggler && input && input instanceof HTMLTextAreaElement && previewSection) {
+            input.value = input.value.trim();
+            isPreviewOn = !isPreviewOn;
 
-    displayPreview();
-}
+            if (isPreviewOn) {
+                const translation = await TranslationManager.fetchTranslation("turn preview off", "index");
+                if (translation) previewToggler.innerText = translation.translation;
 
-function displayPreview() {
-    if (!isPreviewOn()) return;
+                previewSection.style.display = "block";
 
-    const input = document.getElementById("biography-input");
-    const previewArea = document.getElementById("preview");
+                function displayPreview() {
+                    const previewDiv = document.getElementById("preview");
+                    const input = document.getElementById("biography-input");
+                    if (input && input instanceof HTMLTextAreaElement && previewDiv) renderMarkdown(previewDiv, input.value.trim(), 2)
+                };
 
-    if (input && previewArea && input instanceof HTMLTextAreaElement) {
-        previewArea.innerHTML = markdownToHtml("preview", input.value);
-    }
-}
+                displayPreview();
+                input.oninput = displayPreview;
+            } else {
+                const translation = await TranslationManager.fetchTranslation("turn preview on", "index");
+                if (translation) previewToggler.innerText = translation.translation;
 
-async function send() {
-    const input = document.getElementById("biography-input");
-
-    if (input && input instanceof HTMLTextAreaElement) {
-        const editedBio = {
-            [getFocusLang()]: {
-                text: input.value
+                previewSection.style.display = "none";
             }
-        };
+        }
 
-        const response = await doRequest({
-            url: "/api/auth/users",
-            method: "POST",
-            headers: {
-                authorization: session
-            },
-            body: Object.assign(user.biographies, editedBio)
-        });
-
-        if (response.status === 404) return displayMessage(getTextForLanguage(langConfig, "expiredSession"), "fatal");
-        if (response.status !== 200) return handleRequestError(response, langConfig);
-
-        user = (await response.json()).user;
-        return displayMessage(getTextForLanguage(langConfig, "biographyModified"), "success");
     }
 
-    throw new Error();
+    const previewToggler = document.getElementById("toggle-preview");
+    if (previewToggler) previewToggler.addEventListener("click", mini);
 }
 
-async function load() {
-    console.group(`Loading...`);
-    session = await login();
+/**
+ * Loads the language controllers that will affect which biography is displayed and which biography is edited.
+ * @param {User} user
+ * @param {string} focusLang
+ */
+function loadLanguageControls(user, focusLang) {
+    const controls = document.getElementById("controls");
+    const languageCodes = Object.keys(user.biographies).map(k => k.toLowerCase());
 
-    const response = await doRequest({
-        url: "/api/users",
-        method: "GET",
-        headers: {
-            id: session.slice(0, session.indexOf(" "))
-        },
-        body: undefined
-    });
+    if (controls) {
+        focusLang = languageCodes[0];
 
-    if (response.status === 404) return displayMessage(getTextForLanguage(langConfig, "expiredSession"), "fatal");
-    if (response.status !== 200) return handleRequestError(response, langConfig);
+        for (const code of languageCodes) {
+            const flag = getCountryFlagFor(code);
 
-    user = (await response.json()).user;
+            const button = document.createElement("button");
+            button.innerText = flag;
+            button.className = `lang-control small-button`;
 
-    console.log(`Loaded user:`);
-    console.dir(user);
-    console.log(`Loaded session:`);
-    console.dir(session);
+            if (code === focusLang) button.className = `lang-control small-button current-flang`;
 
-    console.groupEnd();
+            button.addEventListener("click", function () {
+                if (code === "us") console.log(`🇺🇸🦅🇺🇸🦅🇺🇸🦅 WHAT THE FUCK IS A KILOMETER?`);
+                if (code === "fr") console.log(`🇫🇷🥖🇫🇷🥖🇫🇷🥖 Oh mon dieu, les gens qui parlent le français, ils ont tellement de charisme!`);
+
+                focusLang = code;
+
+                const bioInput = document.getElementById("biography-input");
+                const controls = document.getElementById("controls");
+
+                if (controls) {
+                    for (const child of controls.children) {
+                        child.className = `lang-control small-button`;
+                    }
+                }
+
+                button.className = `lang-control small-button current-flang`;
+
+                if (bioInput && bioInput instanceof HTMLTextAreaElement) bioInput.value = user.biographies[code].text;
+            });
+
+            controls.appendChild(button);
+        }
+    }
 }
 
-async function main() {
-    await load();
+/**
+ * Creates and adds the event listener for the "Edit biography" button.
+ * @param {User} user 
+ * @param {string} focusLang
+ */
+function setupSendButton(user, focusLang) {
+    const button = document.getElementById("send-button");
 
-    const userlink = `${window.location.origin}/view/${user.id}`;
+    if (button) {
+        button.addEventListener("click", async function () {
+            const input = document.getElementById("biography-input");
 
-    const main = document.getElementById("main");
-    const welcomeContainer = document.getElementById("welcome");
-    const sendButton = document.getElementById("send-button");
-    const controlsContainer = document.getElementById("controls");
-    const togglePreviewButton = document.getElementById("toggle-preview");
-    const userLinkDisplay = document.getElementById("your-link");
+            if (input && input instanceof HTMLTextAreaElement) {
+                if (input.value.trim() === "") {
+                    const translation = await TranslationManager.fetchTranslation("enter some text", "errors");
+                    if (translation) displayMessage(translation.translation, "error");
+                    return;
+                }
 
-    if (!main || !welcomeContainer || !controlsContainer || !sendButton || !togglePreviewButton || !userLinkDisplay || !(userLinkDisplay instanceof HTMLAnchorElement)) throw new Error();
+                const edited = {
+                    [focusLang]: {
+                        text: input.value
+                    }
+                };
 
-    renderLangControls(controlsContainer, displayBio, ...Object.keys(user.biographies));
+                Object.assign(user.biographies, edited);
 
-    sendButton.addEventListener("click", send);
-    togglePreviewButton.addEventListener("click", togglePreview);
+                const req = await request({
+                    method: "POST",
+                    url: "/api/auth/users",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: user.biographies
+                }).catch(err => handleRequestError(err));
 
-    welcomeContainer.innerText = getTextForLanguage(langConfig, "welcomeBack", [user.username]);
-    userLinkDisplay.innerText = userlink;
-    userLinkDisplay.href = userlink;
+                user = req.user;
 
-    displayBio();
-
-    // The view assumes that the preview is toggled off, which may not always be true.
-    // This ensures the correct text is shown.
-    togglePreview();
-    togglePreview();
-
-    //document.title = user.username;
-
-    main.style.display = "block";
+                const translation = await TranslationManager.fetchTranslation("bio modified", "index");
+                if (translation) displayMessage(translation.translation, "success");
+            }
+        });
+    }
 }
 
-window.addEventListener("DOMContentLoaded", main);
+window.addEventListener("DOMContentLoaded", async function () {
+    let user = await fetchLoggedInUser();
+    let focusLang = "us";
+
+    loadLanguageControls(user, focusLang);
+    loadPreviewToggler();
+    setupSendButton(user, focusLang);
+});
