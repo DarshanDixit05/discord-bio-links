@@ -3,12 +3,12 @@ import { join, resolve } from "path";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import { cfg } from "../../config.js";
-import { getSupportedMostPreferredLanguage } from "../../helpers/getSupportedMostPreferredLanguage.js";
+import { getSupportedMostPreferredLanguage } from "../../languages.js";
 
 const i18n = i18next.createInstance();
 
 await i18n.use(Backend).init({
-    fallbackLng: 'en',
+    fallbackLng: 'us',
     ns: [
         "footer",
         "header"

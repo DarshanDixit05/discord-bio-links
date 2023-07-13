@@ -1,4 +1,4 @@
-import { lang } from "../languages.js";
+import { langs } from "../languages.js";
 import { Biography } from "./Biography.js";
 
 export interface User {
@@ -6,5 +6,5 @@ export interface User {
     username: string;
     displayName: string;
     avatarHash: string;
-    biographies: Record<keyof typeof lang, Biography>;
+    biographies: Record<keyof typeof langs, Biography>;
 }

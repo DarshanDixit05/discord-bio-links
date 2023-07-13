@@ -3,7 +3,7 @@ import { join, resolve } from "path";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import { cfg } from "../../config.js";
-import { getSupportedMostPreferredLanguage } from "../../helpers/getSupportedMostPreferredLanguage.js";
+import { getSupportedMostPreferredLanguage } from "../../languages.js";
 import { User } from "../../structures/User.js";
 import { InternalUser } from "../../structures/InternalUser.js";
 import cookieParser from "cookie-parser";
@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 const i18n = i18next.createInstance();
 
 await i18n.use(Backend).init({
-    fallbackLng: 'en',
+    fallbackLng: 'us',
     ns: [
         "footer",
         "settings",

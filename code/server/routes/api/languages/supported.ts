@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import { LoginAttemptManager } from "../../../../structures/LoginAttemptManager.js";
 import { createAuthUrl } from "../../../../helpers/createAuthUrl.js";
 import { cfg } from "../../../../config.js";
-import { getSupportedMostPreferredLanguage } from "../../../../helpers/getSupportedMostPreferredLanguage.js";
+import { getSupportedMostPreferredLanguage } from "../../../../languages.js";
 
 const supported = Router();
 

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { join, resolve } from "path";
 import Backend from "i18next-fs-backend";
 import { cfg } from "../../config.js";
-import { getSupportedMostPreferredLanguage } from "../../helpers/getSupportedMostPreferredLanguage.js";
+import { getSupportedMostPreferredLanguage } from "../../languages.js";
 import cookieParser from 'cookie-parser';
 import i18next from "i18next";
 import { InternalUser } from "../../structures/InternalUser.js";
@@ -16,7 +16,7 @@ import { createAuthUrl } from "../../helpers/createAuthUrl.js";
 const i18n = i18next.createInstance();
 
 await i18n.use(Backend).init({
-    fallbackLng: 'en',
+    fallbackLng: 'us',
     ns: [
         "index",
         "footer",
