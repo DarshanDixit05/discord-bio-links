@@ -33,3 +33,7 @@ h1 {
 #your-link-text {
     word-wrap: break-word;
 }
+
+#biography-input {
+    min-height: 60px;
+}
