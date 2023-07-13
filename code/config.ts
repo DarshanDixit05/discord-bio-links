@@ -26,6 +26,7 @@ export const cfg = {
         redirectUri: "https://localhost:3000"
     },
     directories: {
+        translations: resolve(__dirname, "..", "public", "locales", "json"),
         public: resolve(__dirname, "..", "public"),
         databases: resolve(__dirname, "..", "db"),
         routes: resolve(__dirname, "server", "routes")

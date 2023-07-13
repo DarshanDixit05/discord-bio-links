@@ -8,8 +8,8 @@ const langs = {
 }
 
 for (const lang of Object.keys(langs)) {
-    if (!existsSync(resolve(cfg.directories.public, "locales", lang))) {
-        throw new Error(`No translations in /public/locales/${lang} !`);
+    if (!existsSync(resolve(cfg.directories.translations, lang))) {
+        throw new Error(`No translations in ${cfg.directories.translations}/${lang} !`);
     }
 }
 
