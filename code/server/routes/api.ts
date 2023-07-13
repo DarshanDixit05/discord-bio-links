@@ -1,8 +1,24 @@
-import { Router } from "express";
-import api from "./api/api.js";
+import express, { Router } from "express";
+import rateLimit from "express-rate-limit";
+import userLookup from "./api/users/userLookup.js";
+import login from "./api/login/login.js";
+import authentification from "./api/auth/authentification.js";
+import supported from "./api/languages/supported.js";
 
-const router = Router();
+const api = Router();
 
-router.use("/", api);
+const limiter = rateLimit({
+    windowMs: 1000 * 60,
+    max: 25,
+    standardHeaders: true,
+    message: { message: "You are making too many requests. Try again later.", code: "RATE_LIMITED" }
+});
 
-export default router;
+api.use(express.json());
+api.use("/", limiter);
+api.use("/users", userLookup);
+api.use("/login", login);
+api.use("/auth", authentification);
+api.use("/languages", supported);
+
+export default api;
