@@ -10,13 +10,13 @@ import { SessionToken } from "./Session.js";
 import { randomBytes } from "crypto";
 import DOMPurify from 'isomorphic-dompurify';
 import { isValidDiscordId } from "../helpers/isValidDiscordId.js";
-import { lang } from "../languages.js";
+import { langs } from "../languages.js";
 import { revokeToken } from "../helpers/revokeToken.js";
 
 const users = new Keyv(`sqlite://${cfg.databasePaths.users}`);
 const sessions = new Keyv(`sqlite://${cfg.databasePaths.sessions}`);
 
-const emptyBiographies: Record<keyof typeof lang, Biography> = {
+const emptyBiographies: Record<keyof typeof langs, Biography> = {
     fr: {
         text: ""
     },
@@ -27,7 +27,7 @@ const emptyBiographies: Record<keyof typeof lang, Biography> = {
 
 export class InternalUser {
     public readonly id: string;
-    private _biographies: Record<keyof typeof lang, Biography>;
+    private _biographies: Record<keyof typeof langs, Biography>;
     private _refreshToken: string;
 
     constructor(id: string) {
@@ -109,7 +109,7 @@ export class InternalUser {
         return newSession;
     }
 
-    public async editBios(newBios: Record<keyof typeof lang, Biography>): Promise<true> {
+    public async editBios(newBios: Record<keyof typeof langs, Biography>): Promise<true> {
         const fetchedThis: InternalUser = await this._fetch();
         Object.assign(fetchedThis._biographies, newBios);
         return await fetchedThis.save();
