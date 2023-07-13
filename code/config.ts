@@ -17,6 +17,7 @@ if (process.env.CLIENT_SECRET === undefined || process.env.CLIENT_SECRET === "")
 
 export const cfg = {
     envName,
+    translationsPath: resolve(__dirname, "..", "public", 'locales/{{lng}}/{{ns}}.json'),
     numberOfProxies: parseInt(`${process.env.NUMBER_OF_PROXIES}`),
     port: parseInt(`${process.env.SERVER_PORT}`),
     client: {

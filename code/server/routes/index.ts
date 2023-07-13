@@ -24,7 +24,7 @@ await i18n.use(Backend).init({
         "common"
     ],
     backend: {
-        loadPath: resolve(cfg.directories.public, 'locales/{{lng}}/{{ns}}.json')
+        loadPath: cfg.translationsPath
     }
 });
 
