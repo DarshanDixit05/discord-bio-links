@@ -15,6 +15,16 @@ const limiter = rateLimit({
 });
 
 api.use(express.json());
+
+api.use(function (req, res, next) {
+    console.log(`[${Date.now()}] ${req.method} @ ${req.path}`);
+    console.log(`Request headers:`)
+    console.dir(req.headers);
+    console.log(`Request body:`);
+    console.dir(req.body);
+    next();
+});
+
 api.use("/", limiter);
 api.use("/users", userLookup);
 api.use("/login", login);

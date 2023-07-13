@@ -11,15 +11,6 @@ import index from "./index.js";
 
 const rootRoute = Router();
 
-rootRoute.use(function (req, res, next) {
-    console.log(`[${Date.now()}] ${req.method} @ ${req.path}`);
-    console.log(`Request headers:`)
-    console.dir(req.headers);
-    console.log(`Request body:`);
-    console.dir(req.body);
-    next();
-});
-
 rootRoute.use("/", express.static(resolve(cfg.directories.public)), index);
 rootRoute.use("/api", api);
 rootRoute.use("/guide", guide);
