@@ -1,18 +1,16 @@
 import { Router } from "express";
 import { InternalUser } from "../../../../structures/InternalUser.js";
-import editUser from "./users/editUser.js";
-import logoutOrDeleteUser from "./users/logoutOrDeleteUser.js";
+import cookieParser from "cookie-parser";
+import users from "./users/users.js";
 
 const authentification = Router();
 
-authentification.use("/", async function (req, res, next) {
+authentification.use(cookieParser(), async function (req, res, next) {
     try {
-        const { authorization } = req.headers;
+        if (typeof req.cookies.session !== "string") throw new Error("INVALID_REQUEST");
 
-        if (authorization === undefined) throw new Error("INVALID_REQUEST");
-
-        const sessionToken = authorization.slice(authorization.indexOf(" ") + " ".length);
-        const userId = authorization.slice(0, authorization.indexOf(" "));
+        const sessionToken = req.cookies.session.slice(req.cookies.session.indexOf(" ") + " ".length);
+        const userId = req.cookies.session.slice(0, req.cookies.session.indexOf(" "));
 
         const internalUser = new InternalUser(userId);
 
@@ -21,13 +19,13 @@ authentification.use("/", async function (req, res, next) {
 
         if (!hasNonExpiredSession) throw new Error("EXPIRED_SESSION");
         if (!correctToken) throw new Error("UNAUTHORIZED");
-
         next();
     } catch (err) {
+        res.cookie("session", "");
         next(err);
     }
 });
 
-authentification.use("/users", editUser, logoutOrDeleteUser);
+authentification.use("/users", users);
 
 export default authentification; 
