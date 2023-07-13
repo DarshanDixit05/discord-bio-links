@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<head>
+  <link rel="shortcut icon" href="./../assets/images/ico/favicon.ico" type="image/x-icon">
+
+  <script type="text/javascript" src="./../js/modules/twemoji.min.js" defer></script>
+  <script type="text/javascript" src="./../js/modules/showdown.min.js" defer></script>
+  <script type="text/javascript" src="./../js/modules/dompurify.min.js" defer></script>
+
+  <script src="./../js/helpers/emojiParser.js" defer></script>
+
+  <link rel="stylesheet" href="./../css/reset.css">
+  <link rel="stylesheet" href="./../css/fonts.css">
+  <link rel="stylesheet" href="./../css/common.css">
+  <link rel="stylesheet" href="./../css/index.css">
+
+  <script type="module" src="./../js/pages/index.js" defer></script>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <% if (user === null) { %>
+    <%= translations.login %>
+    <% } else { %>
+    <%= user.username  %>
+    <% } %>
+  </title>
+</head>
+
+
+
+<body>
+  <% if(user===null) { %>
+  <h1><%= translations.appName %>, <%= translations.catchline.toLowerCase() %></h1>
+  <section id="notloggedin">
+    <button id="login-button">
+      <a href="<%= authLink %>" id="login-link">
+        <h4 id="login-prompt">
+          <%= translations.loginButton %>
+        </h4>
+      </a>
+    </button>
+  </section>
+  <% } else { %>
+  <%- include('partials/header.ejs') %>
+
+  <main id="main">
+    <section>
+      <h1 id="welcome"><%= translations.welcomeBack %></h1>
+      <div id="your-link-text">
+        <%= translations.copyPasteLink %>
+        <a href="/view/<%= user.id %>" id="your-link">
+          <%= origin + "/view/" + user.id %>
+        </a>
+      </div>
+
+      <div id="controls">
+        <button class="small-button" id="toggle-preview">
+          <%= translations.turnPreviewOn %>
+        </button>
+      </div>
+
+      <textarea id="biography-input"><%= user.biographies.us.text %></textarea>
+
+      <button id="send-button">
+        <%= translations.editBioButton %>
+      </button>
+    </section>
+
+    <section id="preview-section" style="display: none;">
+      <h1 id="preview-title">
+        <%= translations.bioPreview %>
+      </h1>
+
+      <div id="preview"></div>
+    </section>
+  </main>
+  <% } %>
+
+  <%- include('partials/footer.ejs') %>
+</body>
+
+</html>

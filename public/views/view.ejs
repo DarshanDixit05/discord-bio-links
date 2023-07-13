@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<head>
+  <link rel="shortcut icon" href="./../assets/images/ico/favicon.ico" type="image/x-icon">
+
+  <script type="text/javascript" src="./../js/modules/twemoji.min.js" defer></script>
+  <script type="text/javascript" src="./../js/modules/showdown.min.js" defer></script>
+  <script type="text/javascript" src="./../js/modules/dompurify.min.js" defer></script>
+
+  <script src="./../js/helpers/emojiParser.js" defer></script>
+
+  <link rel="stylesheet" href="./../css/reset.css">
+  <link rel="stylesheet" href="./../css/fonts.css">
+  <link rel="stylesheet" href="./../css/common.css">
+  <link rel="stylesheet" href="./../css/view.css">
+
+  <script type="module" src="./../js/pages/view.js" defer></script>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <% if (user === null) { %>
+    <%= translations.userNotFound %>
+    <% } else { %>
+    <%= user.username  %>
+    <% } %>
+  </title>
+</head>
+
+<body>
+  <%- include('partials/header.ejs') %>
+
+  <% if(user===null) { %>
+  <%= translations.userNotFound %>
+  <% } else { %>
+  <main id="main">
+    <div id="controls">
+      <button class="small-button" id="toggle-raw-view">
+        <%= translations.turnRawViewOn %>
+      </button>
+    </div>
+
+    <div id="formatted-biography-text">
+
+    </div>
+
+    <textarea id="raw-biography-text" disabled style="display: none;"><%= user.biographies.us.text %></textarea>
+
+    <div id="username-display">
+      <%= translations.usernameDisplay %>
+    </div>
+  </main>
+  <% } %>
+
+  <%- include('partials/footer.ejs') %>
+</body>
+
+</html>
