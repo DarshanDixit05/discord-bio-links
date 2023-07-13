@@ -7,6 +7,7 @@
 
 import { TranslationManager } from "../helpers/TranslationManager.js";
 import { displayMessage } from "../helpers/displayMessage.js";
+import { FocusLangManager } from "../helpers/focusLangManager.js";
 import { getCountryFlagFor } from "../helpers/getCountryFlagFor.js";
 import { renderMarkdown } from "../helpers/renderMarkdown.js";
 import { request } from "../helpers/request.js";
@@ -73,10 +74,9 @@ function loadRawToggler() {
 
 /**
  * Loads the language controllers that will affect which biography is displayed.
- * @param {User} user 
- * @param {string} focusLang 
+ * @param {User} user
  */
-function loadLanguageControls(user, focusLang) {
+function loadLanguageControls(user) {
     const controls = document.getElementById("controls");
     const languageCodes = Object.keys(user.biographies).map(k => k.toLowerCase());
 
@@ -88,13 +88,13 @@ function loadLanguageControls(user, focusLang) {
             button.innerText = flag;
             button.className = `lang-control small-button`;
 
-            if (code === focusLang) button.className = `lang-control small-button current-flang`;
+            if (code === FocusLangManager.getFocusLang()) button.className = `lang-control small-button current-flang`;
 
             button.addEventListener("click", function () {
                 if (code === "us") console.log(`🇺🇸🦅🇺🇸🦅🇺🇸🦅 WHAT THE FUCK IS A KILOMETER?`);
                 if (code === "fr") console.log(`🇫🇷🥖🇫🇷🥖🇫🇷🥖 Oh mon dieu, les gens qui parlent le français, ils ont tellement de charisme!`);
 
-                focusLang = code;
+                FocusLangManager.setFocusLang(code);
 
                 if (controls) {
                     for (const child of controls.children) {
@@ -108,8 +108,8 @@ function loadLanguageControls(user, focusLang) {
                 const formattedDisplay = document.getElementById("formatted-biography-text");
 
                 if (formattedDisplay && rawDisplay && rawDisplay instanceof HTMLTextAreaElement) {
-                    rawDisplay.value = user.biographies[focusLang].text;
-                    renderMarkdown(formattedDisplay, user.biographies[focusLang].text, 1);
+                    rawDisplay.value = user.biographies[FocusLangManager.getFocusLang()].text;
+                    renderMarkdown(formattedDisplay, user.biographies[FocusLangManager.getFocusLang()].text, 1);
                 }
             });
 
@@ -119,7 +119,7 @@ function loadLanguageControls(user, focusLang) {
 }
 
 window.addEventListener("DOMContentLoaded", async function () {
-    let focusLang = "us";
+    FocusLangManager.setFocusLang("us");
     const user = await getUser();
 
     if (!user) {
@@ -128,6 +128,6 @@ window.addEventListener("DOMContentLoaded", async function () {
         return;
     }
 
-    loadLanguageControls(user, focusLang);
+    loadLanguageControls(user);
     loadRawToggler();
 });

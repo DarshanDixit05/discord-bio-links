@@ -5,6 +5,7 @@ import { getCountryFlagFor } from "../helpers/getCountryFlagFor.js";
 import { request } from "../helpers/request.js";
 import { displayMessage } from "../helpers/displayMessage.js";
 import { fetchLoggedInUser } from "../helpers/fetchLoggedInUser.js";
+import { FocusLangManager } from "../helpers/focusLangManager.js";
 
 /**
 * @typedef {import('./../types/User.js').User} User
@@ -81,9 +82,8 @@ function loadPreviewToggler() {
 /**
  * Loads the language controllers that will affect which biography is displayed and which biography is edited.
  * @param {User} user
- * @param {string} focusLang
  */
-function loadLanguageControls(user, focusLang) {
+function loadLanguageControls(user) {
     const controls = document.getElementById("controls");
     const languageCodes = Object.keys(user.biographies).map(k => k.toLowerCase());
 
@@ -95,13 +95,13 @@ function loadLanguageControls(user, focusLang) {
             button.innerText = flag;
             button.className = `lang-control small-button`;
 
-            if (code === focusLang) button.className = `lang-control small-button current-flang`;
+            if (code === FocusLangManager.getFocusLang()) button.className = `lang-control small-button current-flang`;
 
             button.addEventListener("click", function () {
                 if (code === "us") console.log(`🇺🇸🦅🇺🇸🦅🇺🇸🦅 WHAT THE FUCK IS A KILOMETER?`);
                 if (code === "fr") console.log(`🇫🇷🥖🇫🇷🥖🇫🇷🥖 Oh mon dieu, les gens qui parlent le français, ils ont tellement de charisme!`);
 
-                focusLang = code;
+                FocusLangManager.setFocusLang(code);
 
                 const bioInput = document.getElementById("biography-input");
                 const controls = document.getElementById("controls");
@@ -125,9 +125,8 @@ function loadLanguageControls(user, focusLang) {
 /**
  * Creates and adds the event listener for the "Edit biography" button.
  * @param {User} user 
- * @param {string} focusLang
  */
-function setupSendButton(user, focusLang) {
+function setupSendButton(user) {
     const button = document.getElementById("send-button");
 
     if (button) {
@@ -142,7 +141,7 @@ function setupSendButton(user, focusLang) {
                 }
 
                 const edited = {
-                    [focusLang]: {
+                    [FocusLangManager.getFocusLang()]: {
                         text: input.value
                     }
                 };
@@ -169,9 +168,9 @@ function setupSendButton(user, focusLang) {
 
 window.addEventListener("DOMContentLoaded", async function () {
     let user = await fetchLoggedInUser();
-    let focusLang = "us";
+    FocusLangManager.setFocusLang("us");
 
-    loadLanguageControls(user, focusLang);
+    loadLanguageControls(user);
     loadPreviewToggler();
-    setupSendButton(user, focusLang);
+    setupSendButton(user);
 });
