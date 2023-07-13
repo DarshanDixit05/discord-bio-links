@@ -73,6 +73,20 @@ function loadRawToggler() {
 }
 
 /**
+ * Displays the user's biography.
+ * @param {User} user
+ */
+function displayBio(user) {
+    const rawDisplay = document.getElementById("raw-biography-text");
+    const formattedDisplay = document.getElementById("formatted-biography-text");
+
+    if (formattedDisplay && rawDisplay && rawDisplay instanceof HTMLTextAreaElement) {
+        rawDisplay.value = user.biographies[FocusLangManager.getFocusLang()].text;
+        renderMarkdown(formattedDisplay, user.biographies[FocusLangManager.getFocusLang()].text, 1);
+    }
+}
+
+/**
  * Loads the language controllers that will affect which biography is displayed.
  * @param {User} user
  */
@@ -104,13 +118,7 @@ function loadLanguageControls(user) {
 
                 button.className = `lang-control small-button current-flang`;
 
-                const rawDisplay = document.getElementById("raw-biography-text");
-                const formattedDisplay = document.getElementById("formatted-biography-text");
-
-                if (formattedDisplay && rawDisplay && rawDisplay instanceof HTMLTextAreaElement) {
-                    rawDisplay.value = user.biographies[FocusLangManager.getFocusLang()].text;
-                    renderMarkdown(formattedDisplay, user.biographies[FocusLangManager.getFocusLang()].text, 1);
-                }
+                displayBio(user);
             });
 
             controls.appendChild(button);
@@ -130,4 +138,6 @@ window.addEventListener("DOMContentLoaded", async function () {
 
     loadLanguageControls(user);
     loadRawToggler();
+
+    displayBio(user);
 });
