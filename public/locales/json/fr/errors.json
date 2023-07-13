@@ -1,8 +1,1 @@
-{
-    "unknown": "Une erreur inconnue est survenue.",
-    "session expired": "Ta session a expiré. Rafraîchis la page pour te reconnecter.",
-    "invalid request": "La requête a été faite avec des en-têtes HTTP malformés ou un corps malformé.",
-    "user not found": "L'utilisateur spécifié n'a pas été trouvé.",
-    "rate limited": "Tu es soumis à une limitation de requêtes.",
-    "enter some text": "Tu dois d'abord entrer du texte."
-}
+{"unknown":"Une erreur inconnue est survenue.","session expired":"Ta session a expiré. Rafraîchis la page pour te reconnecter.","invalid request":"La requête a été faite avec des en-têtes HTTP malformés ou un corps malformé.","user not found":"L'utilisateur spécifié n'a pas été trouvé.","rate limited":"Tu es soumis à une limitation de requêtes.","enter some text":"Tu dois d'abord entrer du texte."}

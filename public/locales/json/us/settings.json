@@ -1,7 +1,1 @@
-{
-    "logout": "Log out",
-    "delete": "Delete the account",
-    "logged out": "Logged out successfully",
-    "deleted": "Account deleted successfully",
-    "confirm delete": "Are you sure you want to delete your account?"
-}
+{"logout":"Log out","delete":"Delete the account","logged out":"Logged out successfully","deleted":"Account deleted successfully","confirm delete":"Are you sure you want to delete your account?"}

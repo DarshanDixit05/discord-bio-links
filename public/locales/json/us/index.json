@@ -1,10 +1,1 @@
-{
-    "edit bio": "Edit your bio",
-    "turn preview on": "Toggle preview on",
-    "turn preview off": "Toggle preview off",
-    "welcome back": "Welcome back, {{username}}",
-    "copy paste link": "Copy and paste this link in your Discord bio:",
-    "bio preview": "Here's a small preview of your bio:",
-    "bio modified": "Your bio was modified successfully!",
-    "login": "Connect with Discord!"
-}
+{"edit bio":"Edit your bio","turn preview on":"Toggle preview on","turn preview off":"Toggle preview off","welcome back":"Welcome back, {{username}}","copy paste link":"Copy and paste this link in your Discord bio:","bio preview":"Here's a small preview of your bio:","bio modified":"Your bio was modified successfully!","login":"Connect with Discord!"}

@@ -1,8 +1,1 @@
-{
-    "unknown": "An unknown error occured.",
-    "session expired": "Your session expired. Refresh the page and log in again.",
-    "invalid request": "The request was made with malformed HTTP headers/malformed body.",
-    "user not found": "The requested user was not found.",
-    "rate limited": "You are being rate limited.",
-    "enter some text": "Enter some text first!"
-}
+{"unknown":"An unknown error occured.","session expired":"Your session expired. Refresh the page and log in again.","invalid request":"The request was made with malformed HTTP headers/malformed body.","user not found":"The requested user was not found.","rate limited":"You are being rate limited.","enter some text":"Enter some text first!"}
