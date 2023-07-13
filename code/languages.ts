@@ -17,4 +17,9 @@ function getSupportedMostPreferredLanguage(preferredLangs: string[]): string {
     return preferredLangs.find((lang: string) => lang in langs) || "us";
 }
 
-export { langs, getSupportedMostPreferredLanguage };
+function isSupportedLanguage(lang: string): boolean {
+    if (lang in langs) return true;
+    return false;
+}
+
+export { langs, getSupportedMostPreferredLanguage, isSupportedLanguage };
