@@ -30,6 +30,13 @@ h1 {
     margin-bottom: 5rem;
 }
 
+@media screen and (max-height: 550px),
+(max-width: 1000px) {
+    #preview {
+        margin-bottom: 1rem;
+    }
+}
+
 #your-link-text {
     word-wrap: break-word;
 }
