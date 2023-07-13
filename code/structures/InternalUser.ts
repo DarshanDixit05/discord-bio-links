@@ -16,8 +16,16 @@ import { revokeToken } from "../helpers/revokeToken.js";
 const users = new Keyv(`sqlite://${cfg.databasePaths.users}`);
 const sessions = new Keyv(`sqlite://${cfg.databasePaths.sessions}`);
 
+const emptyBiographies: Record<keyof typeof lang, Biography> = {
+    fr: {
+        text: ""
+    },
+    us: {
+        text: ""
+    }
+};
+
 export class InternalUser {
-    static readonly TEN_DAYS_IN_MILLISECONDS: number = 1 * 1000 * 60 * 60 * 24 * 10;
     public readonly id: string;
     private _biographies: Record<keyof typeof lang, Biography>;
     private _refreshToken: string;
@@ -25,14 +33,7 @@ export class InternalUser {
     constructor(id: string) {
         if (!isValidDiscordId(id)) throw new TypeError("NOT_A_DISCORD_ID");
         this.id = id;
-        this._biographies = {
-            us: {
-                text: ""
-            },
-            fr: {
-                text: ""
-            }
-        };
+        this._biographies = emptyBiographies;
         this._refreshToken = "";
     }
 
@@ -91,7 +92,8 @@ export class InternalUser {
     }
 
     private async _updateSession(newSession: SessionToken): Promise<true> {
-        return await sessions.set(this.id, newSession, InternalUser.TEN_DAYS_IN_MILLISECONDS);
+        const TEN_DAYS_IN_MS = 1 * 1000 * 60 * 60 * 24 * 10;
+        return await sessions.set(this.id, newSession, TEN_DAYS_IN_MS);
     }
 
     private async _getNewAccessToken(): Promise<DiscordAccessTokenReponse> {
@@ -109,22 +111,20 @@ export class InternalUser {
 
     public async editBios(newBios: Record<keyof typeof lang, Biography>): Promise<true> {
         const fetchedThis: InternalUser = await this._fetch();
-
-        for (const bio of Object.values(newBios)) {
-            bio.text = DOMPurify.sanitize(bio.text, { USE_PROFILES: { html: true } })
-        }
-
-        fetchedThis._biographies = newBios;
+        Object.assign(fetchedThis._biographies, newBios);
         return await fetchedThis.save();
     }
 
     public async get(): Promise<User> {
         const fetchedThis: InternalUser = await this._fetch();
         const freshTokenData = await fetchedThis._getNewAccessToken();
-
         const partialDiscordUserData = await getPartialDiscordUserData(freshTokenData.access_token, freshTokenData.token_type);
-        return InternalUser.toUser(fetchedThis, partialDiscordUserData);
 
+        for (const bio of Object.values(fetchedThis._biographies)) {
+            if (bio.text.trim() === "") bio.text = `# ${partialDiscordUserData.global_name}`;
+        }
+
+        return InternalUser.toUser(fetchedThis, partialDiscordUserData);
     }
 
     public async sessionTokenIs(token: SessionToken): Promise<boolean> {
