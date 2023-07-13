@@ -11,7 +11,9 @@ await i18n.use(Backend).init({
     fallbackLng: 'us',
     ns: [
         "footer",
-        "header"
+        "header",
+        "common",
+        "guide"
     ],
     backend: {
         loadPath: cfg.translationsPath
@@ -33,6 +35,8 @@ guide.get("/", async function (req, res, next) {
             lang: mostPreferredSupportedLanguage,
             origin: cfg.client.redirectUri,
             translations: {
+                appName: translate("app name", { ns: "common" }),
+                guideText: translate("guide", { ns: "guide" }),
                 catchline: translate("catchline", { ns: "header" }),
                 main: translate("main", { ns: "footer" }),
                 sourceCode: translate("github", { ns: "footer" }),
