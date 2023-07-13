@@ -81,8 +81,6 @@ function loadLanguageControls(user, focusLang) {
     const languageCodes = Object.keys(user.biographies).map(k => k.toLowerCase());
 
     if (controls) {
-        focusLang = languageCodes[0];
-
         for (const code of languageCodes) {
             const flag = getCountryFlagFor(code);
 
