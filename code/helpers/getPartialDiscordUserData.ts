@@ -13,5 +13,5 @@ export async function getPartialDiscordUserData(accessToken: string, accessToken
     const response = await doRequest("GET", url, headers, body);
 
     if (isPartialDiscordUserObject(response)) return response;
-    throw new Error("INVALID_TOKEN");
+    throw new Error("INVALID_ACCESS_TOKEN");
 }
