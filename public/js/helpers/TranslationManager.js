@@ -174,7 +174,7 @@ export class TranslationManager {
                         }
 
                         request({
-                            url: `/locales/${lang}/${ns}.json`,
+                            url: `/locales/json/${lang}/${ns}.json`,
                             method: "GET",
                             headers: undefined,
                             body: undefined
