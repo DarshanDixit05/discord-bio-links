@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "launch": "tsc && node public/locales/finalize.js && node build/index.js"
+    "launch": "tsc && node build/helpers/finalizeTranslations.js && node build/index.js"
   },
   "dependencies": {
     "@keyv/sqlite": "^3.6.5",
