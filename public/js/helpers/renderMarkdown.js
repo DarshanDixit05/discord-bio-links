@@ -29,8 +29,12 @@ export function renderMarkdown(element, markdownText, headerLevelStart = 1) {
     // @ts-ignore - Showdown should be available because its script *should* included in the HTML file.
     const converter = new showdown.Converter(options);
     // @ts-ignore
-    const parsed = markdownText.replaceAll("\n\n", "\n<br>");
+    const parsed = markdownText
+        .replace(/\n/g, "  \n")
+        .replace(/  \n  \n/g, "<br><br>  \n  \n");
+
 
     // @ts-ignore - DOMPurify should be available because its script *should* included in the HTML file.
     element.innerHTML = DOMPurify.sanitize(converter.makeHtml(parsed));
+    console.log(element.innerHTML);
 }
