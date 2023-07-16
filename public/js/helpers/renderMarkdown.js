@@ -42,6 +42,8 @@ export function renderMarkdown(element, markdownText, headerLevelStart = 1) {
     element.innerHTML = DOMPurify.sanitize(
         converter.makeHtml(
             prepareMarkdown(markdownText)
-        )
+        ), {
+        FORBID_TAGS: ['img']
+    }
     );
 }

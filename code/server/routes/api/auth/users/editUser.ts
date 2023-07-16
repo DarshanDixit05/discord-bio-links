@@ -14,7 +14,15 @@ editUser.post("/", async function (req, res, next) {
 
         for (const bio of Object.values(req.body)) {
             if (!isBiography(bio)) throw new Error("INVALID_REQUEST");
-            bio.text = DOMPurify.sanitize(bio.text.trim());
+            bio.text = DOMPurify.sanitize(bio.text.trim(), {
+                FORBID_TAGS: ['img'],
+                USE_PROFILES: {
+                    html: true,
+                    mathMl: false,
+                    svg: false,
+                    svgFilters: false
+                }
+            });
         }
 
         for (const lang of Object.keys(req.body)) {
