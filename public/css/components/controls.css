@@ -1,0 +1,19 @@
+#controls {
+    display: flex;
+    margin-bottom: 0.8rem;
+}
+
+#controls>* {
+    border-radius: 0.1rem;
+    flex: 1 0 0;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+#controls>:first-child {
+    margin-left: 0;
+}
+
+#controls>:last-child {
+    margin-right: 0;
+}
