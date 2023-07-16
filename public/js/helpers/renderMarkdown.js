@@ -31,6 +31,7 @@ export function renderMarkdown(element, markdownText, headerLevelStart = 1) {
         openLinksInNewWindow: true,
         emoji: true,
         strikethrough: true,
+        customizedHeaderId: true,
         headerLevelStart
     };
 
