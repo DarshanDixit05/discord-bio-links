@@ -60,7 +60,7 @@ function loadPreviewToggler() {
                 function displayPreview() {
                     const previewDiv = document.getElementById("preview");
                     const input = document.getElementById("biography-input");
-                    if (input && input instanceof HTMLTextAreaElement && previewDiv) renderMarkdown(previewDiv, input.value.trim(), 2)
+                    if (input && input instanceof HTMLTextAreaElement && previewDiv) renderMarkdown(previewDiv, input.value.trim())
                 };
 
                 displayPreview();
