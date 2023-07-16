@@ -1,0 +1,85 @@
+.markdown strong {
+    font-weight: 600;
+}
+
+.markdown em {
+    font-style: italic;
+}
+
+.markdown del {
+    text-decoration: line-through;
+}
+
+.markdown li>ul>li,
+.markdown li>ol>li,
+.markdown blockquote {
+    margin-left: 18px;
+}
+
+/* This is for task list items with a disabled checkbox input */
+.markdown .task-list-item {
+    margin-left: 20px;
+}
+
+/* No nesting. */
+.markdown ul li {
+    list-style: disc inside;
+}
+
+.markdown ol li {
+    list-style: decimal inside;
+}
+
+/* One level of nesting. */
+.markdown li>ol>li {
+    list-style-type: lower-roman;
+}
+
+.markdown li>ul>li {
+    list-style-type: circle;
+}
+
+/* Two levels of nesting. */
+.markdown li>ol>li>ol>li {
+    list-style-type: lower-greek;
+}
+
+.markdown li>ul>li>ul>li {
+    list-style-type: square;
+}
+
+/* Three levels of nesting. */
+.markdown li>ol>li>ol>li>ol>li {
+    list-style-type: lower-latin;
+}
+
+.markdown li>ul>li>ul>li>ul>li {
+    list-style-type: disc;
+}
+
+/* Four levels of nesting. */
+.markdown li>ol>li>ol>li>ol>li>ol>li {
+    list-style-type: upper-roman;
+}
+
+.markdown li>ul>li>ul>li>ul>li>ul>li {
+    list-style-type: circle;
+}
+
+/* Five levels of nesting. */
+.markdown li>ol>li>ol>li>ol>li>ol>li>ol>li {
+    list-style-type: upper-latin;
+}
+
+.markdown li>ul>li>ul>li>ul>li>ul>li>ul>li {
+    list-style-type: square;
+}
+
+/* Six levels of nesting. */
+.markdown li>ol>li>ol>li>ol>li>ol>li>ol>li {
+    list-style-type: armenian;
+}
+
+.markdown li>ul>li>ul>li>ul>li>ul>li>ul>li {
+    list-style-type: disc;
+}
