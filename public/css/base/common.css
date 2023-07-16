@@ -77,18 +77,6 @@ h6 {
     margin-bottom: 0.3rem;
 }
 
-strong {
-    font-weight: 600;
-}
-
-em {
-    font-style: italic;
-}
-
-del {
-    text-decoration: line-through;
-}
-
 .twemoji {
     display: inline;
     height: 1em;
