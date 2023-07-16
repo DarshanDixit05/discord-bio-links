@@ -1,14 +1,5 @@
 // @ts-check
 
-const headerLevelStarts = {
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6
-};
-
 /**
  * Workarounds to ensure proper display.
  * @param {string} text 
@@ -31,7 +22,7 @@ function prepareMarkdown(text) {
  * Renders the given markdown text with the specified headerLevelStart (or 1 by default) within the specified element.
  * @param {HTMLElement} element 
  * @param {string} markdownText 
- * @param {keyof typeof headerLevelStarts | undefined} headerLevelStart 
+ * @param {1 | 2 | 3 | 4 | 5 | 6 | undefined} headerLevelStart 
  */
 export function renderMarkdown(element, markdownText, headerLevelStart = 1) {
     const options = {
