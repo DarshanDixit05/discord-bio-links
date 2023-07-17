@@ -52,14 +52,18 @@ settings.get("/", cookieParser(), async function (req, res, next) {
             authLink,
             origin: cfg.client.redirectUri,
             translations: {
-                catchline: translate("catchline", { ns: "header" }),
+                header: {
+                    catchline: translate("catchline", { ns: "header" })
+                },
+                footer: {
+                    main: translate("main", { ns: "footer" }),
+                    sourceCode: translate("github", { ns: "footer" }),
+                    donate: translate("donate", { ns: "footer" }),
+                    guide: translate("guide", { ns: "footer" }),
+                    settings: translate("settings", { ns: "footer" })
+                },
                 logout: translate("logout", { ns: "settings" }),
                 delete: translate("delete", { ns: "settings" }),
-                main: translate("main", { ns: "footer" }),
-                sourceCode: translate("github", { ns: "footer" }),
-                donate: translate("donate", { ns: "footer" }),
-                guide: translate("guide", { ns: "footer" }),
-                settings: translate("settings", { ns: "footer" }),
             }
         });
     } catch (err) {

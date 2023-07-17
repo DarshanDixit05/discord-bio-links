@@ -45,13 +45,17 @@ view.get("/:id", async function (req, res, next) {
             user,
             lang: mostPreferredSupportedLanguage,
             translations: {
-                catchline: translate("catchline", { ns: "header" }),
+                header: {
+                    catchline: translate("catchline", { ns: "header" })
+                },
+                footer: {
+                    main: translate("main", { ns: "footer" }),
+                    sourceCode: translate("github", { ns: "footer" }),
+                    donate: translate("donate", { ns: "footer" }),
+                    guide: translate("guide", { ns: "footer" }),
+                    settings: translate("settings", { ns: "footer" })
+                },
                 userNotFound: translate("user not found", { ns: "errors" }),
-                main: translate("main", { ns: "footer" }),
-                sourceCode: translate("github", { ns: "footer" }),
-                donate: translate("donate", { ns: "footer" }),
-                guide: translate("guide", { ns: "footer" }),
-                settings: translate("settings", { ns: "footer" }),
                 usernameDisplay: translate("username display", { ns: "view", username: (user === null) ? "" : user.username }),
                 turnRawViewOn: translate("turn raw view on", { ns: "view" })
             }

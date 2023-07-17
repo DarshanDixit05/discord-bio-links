@@ -93,19 +93,23 @@ index.get("/", cookieParser(), async function (req, res, next) {
             authLink,
             origin: cfg.client.redirectUri,
             translations: {
+                header: {
+                    catchline: translate("catchline", { ns: "header" })
+                },
+                footer: {
+                    main: translate("main", { ns: "footer" }),
+                    sourceCode: translate("github", { ns: "footer" }),
+                    donate: translate("donate", { ns: "footer" }),
+                    guide: translate("guide", { ns: "footer" }),
+                    settings: translate("settings", { ns: "footer" })
+                },
                 appName: translate("app name", { ns: "common" }),
-                catchline: translate("catchline", { ns: "header" }),
                 loginButton: translate("login", { ns: "index" }),
                 editBioButton: translate("edit bio", { ns: "index" }),
                 turnPreviewOn: translate("turn preview on", { ns: "index" }),
                 welcomeBack: translate("welcome back", { ns: "index", username: (user === null) ? "" : user.username }),
                 copyPasteLink: translate("copy paste link", { ns: "index" }),
-                bioPreview: translate("bio preview", { ns: "index" }),
-                main: translate("main", { ns: "footer" }),
-                sourceCode: translate("github", { ns: "footer" }),
-                donate: translate("donate", { ns: "footer" }),
-                guide: translate("guide", { ns: "footer" }),
-                settings: translate("settings", { ns: "footer" }),
+                bioPreview: translate("bio preview", { ns: "index" })
             }
         });
     } catch (err) {
