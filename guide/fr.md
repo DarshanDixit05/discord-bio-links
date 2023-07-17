@@ -25,12 +25,12 @@ Voici un exemple avec tous les titres.
 
 Ce qui donne :
 
-#Très grand titre
-##Grand titre
-###Titre un peu plus petit mais grand quand même
-####Un titre plus petit
-#####Encore plus petit
-######Titre le plus petit
+# Très grand titre
+## Grand titre
+### Titre un peu plus petit mais grand quand même
+#### Un titre plus petit
+##### Encore plus petit
+###### Titre le plus petit
 
 # Style du texte
 
