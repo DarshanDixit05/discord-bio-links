@@ -34,11 +34,16 @@ async function handleRequestError(err) {
             if (err.status === 429) {
                 const translation = await TranslationManager.fetchTranslation("rate limited", "errors");
                 if (translation) return displayMessage(translation.translation, "fatal");
+            } else if (err.status === 400) {
+                const translation = await TranslationManager.fetchTranslation("invalid request", "errors");
+                if (translation) return displayMessage(translation.translation, "fatal");
             } else if (err.status === 404) {
                 clearCookie("session");
-
                 const translation = await TranslationManager.fetchTranslation("session expired", "errors");
                 if (translation) return displayMessage(translation.translation, "fatal");
+            } else if (err.status === 500) {
+                const translation = await TranslationManager.fetchTranslation("unknown", "errors");
+                if (translation) return displayMessage(translation.translation, "error");
             }
         }
 
