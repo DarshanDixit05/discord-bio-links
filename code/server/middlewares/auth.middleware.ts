@@ -1,11 +1,7 @@
-import { Router } from "express";
-import { InternalUser } from "../../../../structures/InternalUser.js";
-import cookieParser from "cookie-parser";
-import users from "./users/users.js";
+import { NextFunction, Request, Response } from "express";
+import { InternalUser } from "../../structures/InternalUser.js";
 
-const authentification = Router();
-
-authentification.use(cookieParser(), async function (req, res, next) {
+export async function auth(req: Request, res: Response, next: NextFunction) {
     try {
         if (typeof req.cookies.session !== "string") throw new Error("INVALID_REQUEST");
 
@@ -19,13 +15,10 @@ authentification.use(cookieParser(), async function (req, res, next) {
 
         if (!hasNonExpiredSession) throw new Error("EXPIRED_SESSION");
         if (!correctToken) throw new Error("UNAUTHORIZED");
+
         next();
     } catch (err) {
         res.cookie("session", "");
         next(err);
     }
-});
-
-authentification.use("/users", users);
-
-export default authentification; 
+}; 

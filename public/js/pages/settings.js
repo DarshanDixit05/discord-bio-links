@@ -23,6 +23,19 @@ async function handleRequestError(err) {
             if (err.status === 429) {
                 const translation = await TranslationManager.fetchTranslation("rate limited", "errors");
                 if (translation) return displayMessage(translation.translation, "fatal");
+            } else if (err.status === 401 || err.status === 440 || err.status === 404) {
+                clearCookie("session");
+                const translation = await TranslationManager.fetchTranslation("session expired", "errors");
+                if (translation) return displayMessage(translation.translation, "error");
+            } else if (err.status === 400) {
+                const translation = await TranslationManager.fetchTranslation("invalid request", "errors");
+                if (translation) return displayMessage(translation.translation, "fatal");
+            } else if (err.status === 500) {
+                const translation = await TranslationManager.fetchTranslation("unknown", "errors");
+                if (translation) return displayMessage(translation.translation, "error");
+            } else if (err.status === 500) {
+                const translation = await TranslationManager.fetchTranslation("unknown", "errors");
+                if (translation) return displayMessage(translation.translation, "error");
             }
         }
 
@@ -42,7 +55,7 @@ function setupLogoutButton() {
     if (logout) {
         logout.addEventListener("click", async function () {
             const res = await request({
-                url: "/api/auth/users/logout",
+                url: "/api/users/revoke",
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -62,7 +75,7 @@ function setupLogoutButton() {
 function setupDeleteButton() {
     async function deleteAcc() {
         const res = await request({
-            url: "/api/auth/users",
+            url: "/api/users",
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"

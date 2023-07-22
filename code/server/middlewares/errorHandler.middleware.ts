@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { errorCodeIndex } from "../structures/ErrorIndex.js";
+import { NextFunction, Request, Response } from "express";
+import { errorCodeIndex } from "../../structures/ErrorIndex.js";
+
 
 export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
     let httpErrorCode: number = 500;

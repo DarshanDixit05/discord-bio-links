@@ -37,7 +37,7 @@ export class TranslationManager {
             if (saved) return resolve(saved);
 
             request({
-                url: "/api/languages",
+                url: "/api/language",
                 method: "GET",
                 body: undefined,
                 headers: undefined
@@ -48,8 +48,8 @@ export class TranslationManager {
                         return resolve(lang);
                     }
 
-                    sessionStorage.setItem("lang", "en");
-                    return resolve("en");
+                    sessionStorage.setItem("lang", "us");
+                    return resolve("us");
                 })
                 .catch(function (err) { console.error(err); });
         });

@@ -30,10 +30,13 @@ async function getUser() {
             body: undefined
         });
 
-        if (!isUser(res.user)) throw new Error();
+        if (!isUser(res.user)) throw new Error("error while fetching");
+
         return res.user;
     } catch (err) {
         console.error(err);
+        const translation = await TranslationManager.fetchTranslation("user not found", "errors");
+        if (translation) displayMessage(translation.translation, "error");
         return null;
     }
 }
