@@ -42,7 +42,7 @@ function setupLogoutButton() {
     if (logout) {
         logout.addEventListener("click", async function () {
             const res = await request({
-                url: "/api/auth/users/logout",
+                url: "/api/users/revoke",
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -62,7 +62,7 @@ function setupLogoutButton() {
 function setupDeleteButton() {
     async function deleteAcc() {
         const res = await request({
-            url: "/api/auth/users",
+            url: "/api/users",
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"

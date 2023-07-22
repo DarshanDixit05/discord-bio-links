@@ -10,7 +10,7 @@ import { SessionToken } from "./Session.js";
 import { randomBytes } from "crypto";
 import DOMPurify from 'isomorphic-dompurify';
 import { isValidDiscordId } from "../helpers/isValidDiscordId.js";
-import { langs } from "../languages.js";
+import { isSupportedLanguage, langs } from "../languages.js";
 import { revokeToken } from "../helpers/revokeToken.js";
 
 const users = new Keyv(`sqlite://${cfg.databasePaths.users}`);
@@ -64,6 +64,12 @@ export class InternalUser {
         return (await users.has(id));
     }
 
+    static validateBios(bios: unknown): void {
+        if (bios === null || typeof bios !== "object") throw false;
+        for (const lang of Object.keys(bios)) if (!isSupportedLanguage(lang)) throw false;
+        for (const bio of Object.values(bios)) if (!isBiography(bio)) throw false;
+    }
+
     private async _fetch(): Promise<InternalUser> {
         const rawFetched = await users.get(this.id);
         if (rawFetched === undefined) throw new Error("UNKNOWN_INTERNAL_USER");
@@ -88,6 +94,7 @@ export class InternalUser {
     public async revokeToken(): Promise<true> {
         const tokenData = await this._getNewAccessToken();
         await revokeToken(tokenData.access_token);
+        await this.getNewSession();
         return true;
     }
 
@@ -111,6 +118,17 @@ export class InternalUser {
 
     public async editBios(newBios: Record<keyof typeof langs, Biography>): Promise<true> {
         const fetchedThis: InternalUser = await this._fetch();
+        for (const bio of Object.values(newBios)) {
+            bio.text = DOMPurify.sanitize(bio.text.trim(), {
+                FORBID_TAGS: ['img'],
+                USE_PROFILES: {
+                    html: true,
+                    mathMl: false,
+                    svg: false,
+                    svgFilters: false
+                }
+            });
+        }
         Object.assign(fetchedThis._biographies, newBios);
         return await fetchedThis.save();
     }

@@ -150,7 +150,7 @@ function setupSendButton(user) {
 
                 const req = await request({
                     method: "POST",
-                    url: "/api/auth/users",
+                    url: "/api/users/bios",
                     headers: {
                         "Content-Type": "application/json"
                     },

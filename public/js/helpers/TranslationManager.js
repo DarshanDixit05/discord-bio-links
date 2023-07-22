@@ -37,7 +37,7 @@ export class TranslationManager {
             if (saved) return resolve(saved);
 
             request({
-                url: "/api/languages",
+                url: "/api/language",
                 method: "GET",
                 body: undefined,
                 headers: undefined
