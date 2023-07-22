@@ -48,8 +48,8 @@ export class TranslationManager {
                         return resolve(lang);
                     }
 
-                    sessionStorage.setItem("lang", "en");
-                    return resolve("en");
+                    sessionStorage.setItem("lang", "us");
+                    return resolve("us");
                 })
                 .catch(function (err) { console.error(err); });
         });
