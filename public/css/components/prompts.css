@@ -1,0 +1,16 @@
+.prompt {
+    position: absolute;
+    border: 3px solid black;
+    max-width: 40%;
+    margin: 5rem auto;
+}
+
+.prompt button {
+    margin-right: 15px;
+    border: 1px solid black;
+    transition: text-decoration 2s, background-color 2s ease-out;
+}
+
+.prompt>form {
+    margin-top: 0.5rem;
+}

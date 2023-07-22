@@ -1,0 +1,25 @@
+.message {
+    position: fixed;
+    bottom: 8%;
+    right: 3%;
+    transition: opacity 2.5s ease-out;
+    border: none;
+    padding: 1.25rem;
+    border-radius: 0.15rem;
+    border: 1px solid #f1f2e4;
+    background: #f1f2e4;
+    color: #181515;
+}
+
+.message-success,
+.message-error {
+    font-weight: 600;
+}
+
+.message.message-success {
+    background: #38b905;
+}
+
+.message.message-error {
+    background: #f01a03;
+}

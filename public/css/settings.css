@@ -1,0 +1,19 @@
+@import url("base/base.css");
+
+main {
+    margin-top: 3rem;
+}
+
+main>button {
+    display: block;
+    margin: 0.5rem auto;
+    width: 35%;
+}
+
+@media screen and (max-width: 1000px) {
+    main>button {
+        display: block;
+        margin: 0.5rem auto;
+        width: 100%;
+    }
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://*; child-src 'none';" />
+
+  <link rel="shortcut icon" href="./../assets/images/ico/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../css/fonts.css" integrity="sha384-5sVHIugSfbssgga9z6VTQQ9AJIKJMeJpeDB3SmVmJGUmMJVUKYuWmjBUGmsibED9" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/index.css" integrity="sha384-qX7JCP2KeGRH+DTL+DR4DE5rf7PU6KoEMgc5Bh6LiFAz7SOnmJNQaN2YYyBTdgCp" crossorigin="anonymous">
+
+  <script type="text/javascript" src="./../js/modules/twemoji.min.js" defer integrity="sha384-fgTHIWEzyS7ma60ROROt7fyaopMtsloAcf5748OMLjMScAgO/PppvjI52ndRH3Bc" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="./../js/modules/showdown.min.js" defer integrity="sha384-3yNUMzbp4x88zStMSzhoJHW9GeBoau2i2GPviE1aiy2mVzFtCTrXsEIMD42jS8NP" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="./../js/modules/dompurify.min.js" defer integrity="sha384-krzSBz5X8+UwrL/HMuKV4yJH5d/6VPNcELEVjSzfGAJ8tnZqrFNrwNHwn8ccBGx9" crossorigin="anonymous"></script>
+
+  <script src="./../js/helpers/emojiParser.js" defer integrity="sha384-JwF15X062x3/zKE33eEqb8py+JERGEhVfx52jpH/Z8KvqxbRuDcRldTzJfBnOlpt" crossorigin="anonymous"></script>
+  <script type="module" src="./../js/pages/index.js" defer integrity="sha384-AWgh8u5DjJOE42o9fij4I3XY03CqL6uhERI07LcI3SAe5aALrdfuioOU/8X8XlKt" crossorigin="anonymous"></script>
+
+  <title>
+    <% if (user === null) { %>
+    <%= translations.login %>
+    <% } else { %>
+    <%= user.username  %>
+    <% } %>
+  </title>
+</head>
+
+<body>
+  <% if(user===null) { %>
+  <h1><%= translations.appName %>, <%= translations.header.catchline.toLowerCase() %></h1>
+  <section id="notloggedin">
+    <button id="login-button">
+      <a href="<%= authLink %>" id="login-link">
+        <h4 id="login-prompt">
+          <%= translations.loginButton %>
+        </h4>
+      </a>
+    </button>
+  </section>
+  <% } else { %>
+  <%- include('partials/header.ejs') %>
+
+  <main id="main">
+    <section>
+      <h1 id="welcome"><%= translations.welcomeBack %></h1>
+      <div id="your-link-text">
+        <%= translations.copyPasteLink %>
+        <br>
+        <br>
+        <a href="/view/<%= user.id %>" id="your-link">
+          <%= origin + "/view/" + user.id %>
+        </a>
+      </div>
+
+      <div id="controls">
+        <button class="small-button" id="toggle-preview">
+          <%= translations.turnPreviewOn %>
+        </button>
+      </div>
+
+      <textarea id="biography-input"><%= user.biographies.us.text %></textarea>
+
+      <button id="send-button">
+        <%= translations.editBioButton %>
+      </button>
+    </section>
+
+    <section id="preview-section">
+      <h1 id="preview-title">
+        <%= translations.bioPreview %>
+      </h1>
+
+      <div id="preview" class="markdown"></div>
+    </section>
+  </main>
+  <% } %>
+
+  <%- include('partials/footer.ejs') %>
+</body>
+
+</html>

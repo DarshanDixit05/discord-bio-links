@@ -1,0 +1,13 @@
+@import url("base/base.css");
+
+#username-display {
+    font-size: small;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+#raw-biography-text {
+    margin-top: 3rem;
+    height: fit-content;
+    min-height: 75px;
+}

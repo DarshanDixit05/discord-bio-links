@@ -1,0 +1,86 @@
+html {
+    color: #f1f2e4;
+    background-color: #01122e;
+    font-family: Poppins;
+}
+
+main {
+    display: block;
+    margin: auto;
+    width: 70%;
+}
+
+hr {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border: 2px solid #f1f2e4;
+}
+
+textarea {
+    background-color: #cdc;
+    border: 1px solid #f1f2e4;
+    border-radius: 0.3rem;
+    width: 100%;
+    height: 40vh;
+    resize: vertical;
+    overflow: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-align: center;
+}
+
+h1 {
+    font-weight: 800;
+    font-size: 2.75rem;
+    margin-top: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-weight: 800;
+    font-size: 2.2rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.8rem;
+}
+
+h3 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.8rem;
+}
+
+h4 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.6rem;
+}
+
+h5 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+}
+
+h6 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.3rem;
+}
+
+.twemoji {
+    display: inline;
+    height: 1em;
+    width: 1.2em;
+    padding-inline: 0.1em;
+    vertical-align: -0.14em;
+}
