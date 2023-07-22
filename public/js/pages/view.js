@@ -136,6 +136,9 @@ function adjustRawDisplayHeight() {
 }
 
 window.addEventListener("DOMContentLoaded", async function () {
+    const rawBioDisplay = document.getElementById("raw-biography-text");
+    if (rawBioDisplay) rawBioDisplay.style.display = "none";
+
     FocusLangManager.setFocusLang("us");
     const user = await getUser();
 

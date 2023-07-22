@@ -167,6 +167,9 @@ function setupSendButton(user) {
 }
 
 window.addEventListener("DOMContentLoaded", async function () {
+    const previewSection = document.getElementById("preview-section");
+    if (previewSection) previewSection.style.display = "none";
+
     let user = await fetchLoggedInUser();
     FocusLangManager.setFocusLang("us");
 
