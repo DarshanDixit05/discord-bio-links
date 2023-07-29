@@ -112,6 +112,8 @@ function loadLanguageControls(user) {
             if (code === FocusLangManager.getFocusLang()) button.className = `lang-control small-button current-flang`;
 
             button.addEventListener("click", function () {
+                const oldFocusLang = FocusLangManager.getFocusLang();
+
                 if (code === "us") console.log(`🇺🇸🦅🇺🇸🦅🇺🇸🦅 WHAT THE FUCK IS A KILOMETER?`);
                 if (code === "fr") console.log(`🇫🇷🥖🇫🇷🥖🇫🇷🥖 Oh mon dieu, les gens qui parlent le français, ils ont tellement de charisme!`);
 
@@ -128,7 +130,11 @@ function loadLanguageControls(user) {
 
                 button.className = `lang-control small-button current-flang`;
 
-                if (bioInput && bioInput instanceof HTMLTextAreaElement) bioInput.value = user.biographies[code].text;
+                if (bioInput && bioInput instanceof HTMLTextAreaElement) {
+                    sessionStorage.setItem(`bio-${oldFocusLang}`, bioInput.value);
+                    bioInput.value = sessionStorage.getItem(`bio-${code}`) || user.biographies[code].text;
+                }
+
                 displayPreview();
             });
 
@@ -162,6 +168,8 @@ function setupSendButton(user) {
                 };
 
                 Object.assign(user.biographies, edited);
+
+                for (const lang of Object.keys(user.biographies)) sessionStorage.removeItem(`bio-${lang}`);
 
                 const req = await request({
                     method: "POST",
