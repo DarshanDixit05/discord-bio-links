@@ -30,13 +30,13 @@
   <% if(user===null) { %>
   <h1><%= translations.appName %>, <%= translations.header.catchline.toLowerCase() %></h1>
   <section id="notloggedin">
-    <button id="login-button">
-      <a href="<%= authLink %>" id="login-link">
+    <a href="<%= authLink %>" id="login-link">
+      <button id="login-button">
         <h4 id="login-prompt">
           <%= translations.loginButton %>
         </h4>
-      </a>
-    </button>
+      </button>
+    </a>
   </section>
   <% } else { %>
   <%- include('partials/header.ejs') %>
