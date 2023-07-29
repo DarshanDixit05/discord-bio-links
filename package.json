@@ -4,10 +4,11 @@
     "url": "https://github.com/xefyr675/discord-bio-links.git"
   },
   "name": "discord-bio-links",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "type": "module",
   "scripts": {
-    "start": "tsc && node build/helpers/finalizeTranslations.js && node build/index.js"
+    "translate": "tsc && node build/helpers/finalizeTranslations.js",
+    "start": "tsc && node build/index.js"
   },
   "dependencies": {
     "@keyv/sqlite": "^3.6.5",
@@ -16,7 +17,6 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.1",
-    "hjson": "^3.2.2",
     "i18next": "^23.2.8",
     "i18next-fs-backend": "^2.1.5",
     "isomorphic-dompurify": "^1.7.0",
@@ -29,6 +29,7 @@
     "@types/express": "^4.17.17",
     "@types/hjson": "^2.4.3",
     "@types/node": "^20.3.3",
+    "hjson": "^3.2.2",
     "typescript": "^5.1.6"
   }
 }

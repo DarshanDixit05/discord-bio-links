@@ -28,6 +28,10 @@ h1#welcome {
     padding: 0.6rem;
 }
 
+#send-button:disabled {
+    background-color: #d0d0d0;
+}
+
 #preview {
     margin-bottom: 5rem;
 }

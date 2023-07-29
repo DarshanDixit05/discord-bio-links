@@ -48,6 +48,15 @@ async function handleRequestError(err) {
 }
 
 /**
+ * Renders the Markdown preview inside the preview box.
+ */
+function displayPreview() {
+    const previewDiv = document.getElementById("preview");
+    const input = document.getElementById("biography-input");
+    if (input && input instanceof HTMLTextAreaElement && previewDiv) renderMarkdown(previewDiv, input.value.trim())
+};
+
+/**
  * Creates and adds the event listener for the "Toggle preview on/off" button.
  */
 function loadPreviewToggler() {
@@ -68,14 +77,8 @@ function loadPreviewToggler() {
 
                 previewSection.style.display = "block";
 
-                function displayPreview() {
-                    const previewDiv = document.getElementById("preview");
-                    const input = document.getElementById("biography-input");
-                    if (input && input instanceof HTMLTextAreaElement && previewDiv) renderMarkdown(previewDiv, input.value.trim())
-                };
-
                 displayPreview();
-                input.oninput = displayPreview;
+                input.addEventListener("input", displayPreview);
             } else {
                 const translation = await TranslationManager.fetchTranslation("turn preview on", "index");
                 if (translation) previewToggler.innerText = translation.translation;
@@ -109,6 +112,8 @@ function loadLanguageControls(user) {
             if (code === FocusLangManager.getFocusLang()) button.className = `lang-control small-button current-flang`;
 
             button.addEventListener("click", function () {
+                const oldFocusLang = FocusLangManager.getFocusLang();
+
                 if (code === "us") console.log(`🇺🇸🦅🇺🇸🦅🇺🇸🦅 WHAT THE FUCK IS A KILOMETER?`);
                 if (code === "fr") console.log(`🇫🇷🥖🇫🇷🥖🇫🇷🥖 Oh mon dieu, les gens qui parlent le français, ils ont tellement de charisme!`);
 
@@ -125,7 +130,13 @@ function loadLanguageControls(user) {
 
                 button.className = `lang-control small-button current-flang`;
 
-                if (bioInput && bioInput instanceof HTMLTextAreaElement) bioInput.value = user.biographies[code].text;
+                if (bioInput && bioInput instanceof HTMLTextAreaElement) {
+                    sessionStorage.setItem(`bio-${oldFocusLang}`, bioInput.value);
+                    bioInput.value = sessionStorage.getItem(`bio-${code}`) || user.biographies[code].text;
+                }
+
+                displayPreview();
+                sendButtonDisabler(user);
             });
 
             controls.appendChild(button);
@@ -138,6 +149,9 @@ function loadLanguageControls(user) {
  * @param {User} user 
  */
 function setupSendButton(user) {
+    const input = document.getElementById("biography-input");
+    if (input && input instanceof HTMLTextAreaElement) input.addEventListener("input", () => sendButtonDisabler(user));
+
     const button = document.getElementById("send-button");
 
     if (button) {
@@ -159,6 +173,8 @@ function setupSendButton(user) {
 
                 Object.assign(user.biographies, edited);
 
+                for (const lang of Object.keys(user.biographies)) sessionStorage.removeItem(`bio-${lang}`);
+
                 const req = await request({
                     method: "POST",
                     url: "/api/users/bios",
@@ -169,11 +185,26 @@ function setupSendButton(user) {
                 }).catch(err => handleRequestError(err));
 
                 user = req.user;
+                sendButtonDisabler(user);
 
                 const translation = await TranslationManager.fetchTranslation("bio modified", "index");
                 if (translation) displayMessage(translation.translation, "success");
             }
         });
+    }
+}
+
+/**
+ * Controls whether or not the send button should be disabled or not.
+ * @param {User} user
+ */
+function sendButtonDisabler(user) {
+    const button = document.getElementById("send-button");
+    const input = document.getElementById("biography-input");
+
+    if (input && button && input instanceof HTMLTextAreaElement && button instanceof HTMLButtonElement) {
+        if (input.value.trim() === "" || input.value.trim() === user.biographies[FocusLangManager.getFocusLang()].text.trim()) return button.disabled = true;
+        button.disabled = false;
     }
 }
 
@@ -187,4 +218,5 @@ window.addEventListener("DOMContentLoaded", async function () {
     loadLanguageControls(user);
     loadPreviewToggler();
     setupSendButton(user);
+    sendButtonDisabler(user);
 });

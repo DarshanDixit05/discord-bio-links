@@ -3,5 +3,6 @@
     "delete": "Supprimer son compte",
     "logged out": "Tu as bien été déconnecté !",
     "deleted": "Ton compte a bien été supprimé.",
-    "confirm delete": "Es-tu sûr de vouloir supprimer ton compte?"
+    "confirm delete": "Es-tu sûr de vouloir supprimer ton compte?",
+    "confirm logout": "Es-tu sûr de vouloir te déconnecter de ton compte?"
 }

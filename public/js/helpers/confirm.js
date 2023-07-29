@@ -34,13 +34,21 @@ export function confirm(message, yesButtonText, noButtonText, ifYes, ifNo) {
     yes.className = "confirm";
     no.className = "cancel";
 
+    form.addEventListener("submit", (event) => event.preventDefault());
+
     setTimeout(function () {
-        yes.addEventListener("click", ifYes);
+        yes.addEventListener("click", async () => {
+            await ifYes();
+            try { dialog.remove(); } catch (err) { console.error(err); }
+        });
         yes.disabled = false;
     }, 2_500);
 
     setTimeout(function () {
-        no.addEventListener("click", ifNo);
+        no.addEventListener("click", async () => {
+            await ifNo();
+            try { dialog.remove(); } catch (err) { console.error(err); }
+        });
         no.disabled = false;
     }, 2_500);
 }

@@ -3,5 +3,6 @@
   "delete": "Delete the account",
   "logged out": "Logged out successfully",
   "deleted": "Account deleted successfully",
-  "confirm delete": "Are you sure you want to delete your account?"
+  "confirm delete": "Are you sure you that want to delete your account?",
+  "confirm logout": "Are you sure you that want to log out from your account?"
 }
