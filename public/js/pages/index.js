@@ -48,6 +48,15 @@ async function handleRequestError(err) {
 }
 
 /**
+ * Renders the Markdown preview inside the preview box.
+ */
+function displayPreview() {
+    const previewDiv = document.getElementById("preview");
+    const input = document.getElementById("biography-input");
+    if (input && input instanceof HTMLTextAreaElement && previewDiv) renderMarkdown(previewDiv, input.value.trim())
+};
+
+/**
  * Creates and adds the event listener for the "Toggle preview on/off" button.
  */
 function loadPreviewToggler() {
@@ -67,12 +76,6 @@ function loadPreviewToggler() {
                 if (translation) previewToggler.innerText = translation.translation;
 
                 previewSection.style.display = "block";
-
-                function displayPreview() {
-                    const previewDiv = document.getElementById("preview");
-                    const input = document.getElementById("biography-input");
-                    if (input && input instanceof HTMLTextAreaElement && previewDiv) renderMarkdown(previewDiv, input.value.trim())
-                };
 
                 displayPreview();
                 input.oninput = displayPreview;
@@ -126,6 +129,7 @@ function loadLanguageControls(user) {
                 button.className = `lang-control small-button current-flang`;
 
                 if (bioInput && bioInput instanceof HTMLTextAreaElement) bioInput.value = user.biographies[code].text;
+                displayPreview();
             });
 
             controls.appendChild(button);
