@@ -78,7 +78,7 @@ function loadPreviewToggler() {
                 previewSection.style.display = "block";
 
                 displayPreview();
-                input.oninput = displayPreview;
+                input.addEventListener("input", displayPreview);
             } else {
                 const translation = await TranslationManager.fetchTranslation("turn preview on", "index");
                 if (translation) previewToggler.innerText = translation.translation;
@@ -136,6 +136,7 @@ function loadLanguageControls(user) {
                 }
 
                 displayPreview();
+                sendButtonDisabler(user);
             });
 
             controls.appendChild(button);
@@ -148,6 +149,9 @@ function loadLanguageControls(user) {
  * @param {User} user 
  */
 function setupSendButton(user) {
+    const input = document.getElementById("biography-input");
+    if (input && input instanceof HTMLTextAreaElement) input.addEventListener("input", () => sendButtonDisabler(user));
+
     const button = document.getElementById("send-button");
 
     if (button) {
@@ -181,11 +185,26 @@ function setupSendButton(user) {
                 }).catch(err => handleRequestError(err));
 
                 user = req.user;
+                sendButtonDisabler(user);
 
                 const translation = await TranslationManager.fetchTranslation("bio modified", "index");
                 if (translation) displayMessage(translation.translation, "success");
             }
         });
+    }
+}
+
+/**
+ * Controls whether or not the send button should be disabled or not.
+ * @param {User} user
+ */
+function sendButtonDisabler(user) {
+    const button = document.getElementById("send-button");
+    const input = document.getElementById("biography-input");
+
+    if (input && button && input instanceof HTMLTextAreaElement && button instanceof HTMLButtonElement) {
+        if (input.value.trim() === "" || input.value.trim() === user.biographies[FocusLangManager.getFocusLang()].text.trim()) return button.disabled = true;
+        button.disabled = false;
     }
 }
 
@@ -199,4 +218,5 @@ window.addEventListener("DOMContentLoaded", async function () {
     loadLanguageControls(user);
     loadPreviewToggler();
     setupSendButton(user);
+    sendButtonDisabler(user);
 });
