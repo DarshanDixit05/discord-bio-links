@@ -4,6 +4,30 @@ This application uses Markdown to handle text formatting.
 
 In this guide, I'll show you the Markdown syntax that's supported on this website and that you can use to make your bios look cooler!
 
+# Table of contents
+
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+- [Headers](#headers)
+- [Text styling](#text-styling)
+- [Lists](#lists)
+  * [Unordered lists](#unordered-lists)
+  * [Ordered lists](#ordered-lists)
+  * [Task lists](#task-lists)
+  * [Nested lists](#nested-lists)
+  * [Please, note](#please-note)
+- [Horizontal rules](#horizontal-rules)
+- [Quoting](#quoting)
+- [Links](#links)
+- [Code](#code)
+  * [Inline code](#inline-code)
+  * [Code block](#code-block)
+- [Tables](#tables)
+- [Images ?](#images-)
+- [Things are not displaying as expected?](#things-are-not-displaying-as-expected)
+
+<!-- TOC end -->
+
 # Headers
 
 You can create a header by starting a new line with `#`, then adding some text.
@@ -181,14 +205,6 @@ would be written as
 >
 >  — Yui Hirasawa
 ```
-
-# Emojis
-
-You to use emoji codes for some emojis.
-
-For example, you could write `:smile:` for 😄.
-
-To see the full list of emojis supported, read the [ShowdownJS documentation](https://github.com/showdownjs/showdown/wiki/Emojis).
 
 # Links
 
