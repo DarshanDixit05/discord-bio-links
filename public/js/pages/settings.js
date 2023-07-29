@@ -53,7 +53,7 @@ function setupLogoutButton() {
     const logout = document.getElementById("logout");
 
     if (logout) {
-        logout.addEventListener("click", async function () {
+        async function logoutUser() {
             const res = await request({
                 url: "/api/users/revoke",
                 method: "POST",
@@ -67,6 +67,22 @@ function setupLogoutButton() {
             if (Object.keys(res).length === 0) {
                 const translation = await TranslationManager.fetchTranslation("logged out", "settings");
                 if (translation) displayMessage(translation.translation, "success");
+            }
+        }
+
+        logout.addEventListener("click", async function () {
+            const confirmationTranslation = await TranslationManager.fetchTranslation("confirm logout", "settings");
+            const yesTranslation = await TranslationManager.fetchTranslation("yes", "common");
+            const noTranslation = await TranslationManager.fetchTranslation("no", "common");
+
+            if (confirmationTranslation && yesTranslation && noTranslation) {
+                confirm(
+                    confirmationTranslation.translation,
+                    yesTranslation.translation,
+                    noTranslation.translation,
+                    logoutUser,
+                    () => null
+                );
             }
         });
     }
