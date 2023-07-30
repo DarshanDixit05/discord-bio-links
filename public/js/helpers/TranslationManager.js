@@ -238,8 +238,8 @@ export class TranslationManager {
                 .then(function (lang) {
                     TranslationManager._fetchTranslation(code, ns, lang)
                         .then(function (translation) {
-                            if (translation === null && lang !== "en") {
-                                TranslationManager._fetchTranslation(code, ns, "en")
+                            if (translation === null && lang !== "us") {
+                                TranslationManager._fetchTranslation(code, ns, "us")
                                     .then(function (fallbackTranslation) { resolve(fallbackTranslation); });
                             } else resolve(translation);
                         });
