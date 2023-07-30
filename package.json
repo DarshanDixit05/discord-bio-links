@@ -4,7 +4,7 @@
     "url": "https://github.com/xefyr675/discord-bio-links.git"
   },
   "name": "discord-bio-links",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "type": "module",
   "scripts": {
     "translate": "tsc && node build/helpers/finalizeTranslations.js",
