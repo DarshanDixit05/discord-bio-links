@@ -44,11 +44,11 @@
 
 A web application that won't limit your "about-me" section to 190 characters.
 
-The application is live at (URL).
+The application is live at [discord-bio-links.onrender.com](https://discord-bio-links.onrender.com/).
 
 ## Installation
 
-> This is if you want to run the application locally. If you just want to use it, visit (URL).
+> This is if you want to run the application locally. If you just want to use it, visit [discord-bio-links.onrender.com](https://discord-bio-links.onrender.com/).
 
 Clone the repo either through HTTPS or SSH.
 
@@ -64,7 +64,7 @@ npm install
 
 ## Configuration
 
-> This is if you want to run the application locally. If you just want to use it, visit (URL).
+> This is if you want to run the application locally. If you just want to use it, visit [discord-bio-links.onrender.com](https://discord-bio-links.onrender.com/).
 
 Go to `code/config.ts` and make sure that line 8 is
 
@@ -100,7 +100,7 @@ Then, you'll need to create a Discord application through [Discord's developer p
 
 ## Usage
 
-> This is if you want to run the application locally. If you just want to use it, visit (URL).
+> This is if you want to run the application locally. If you just want to use it, visit [discord-bio-links.onrender.com](https://discord-bio-links.onrender.com/).
 
 Starting the app:
 ```shell
@@ -114,7 +114,7 @@ npm run translate
 
 ## Contributing
 
-> This is if you want to run to contribute to the development of the application. If you just want to use it, visit (URL).
+> This is if you want to run to contribute to the development of the application. If you just want to use it, visit [discord-bio-links.onrender.com](https://discord-bio-links.onrender.com/).
 
 - Fork this repository by clicking [here](https://github.com/xefyrdev/discord-bio-links/fork).
 - Install the project just like shown in [Installation](#installation) but clone your fork instead.
