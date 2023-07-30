@@ -4,6 +4,30 @@ Cette application utilise Markdown pour mettre en forme le texte.
 
 Dans ce guide, je vais te montrer la syntaxe Markdown supportée sur ce site que tu peux utiliser pour rendre tes bios plus jolies !
 
+# Table des matières
+
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+- [Titres](#titres)
+- [Style du texte](#style-du-texte)
+- [Listes](#listes)
+  * [Listes non ordonnées](#listes-non-ordonnées)
+  * [Listes ordonnées](#listes-ordonnées)
+  * [Liste de tâches](#liste-de-tâches)
+  * [Listes imbriquées](#listes-imbriquées)
+  * [Notes](#notes)
+- [Séparation horizontale](#séparation-horizontale)
+- [Citations](#citations)
+- [Links](#links)
+- [Code](#code)
+  * [Code en ligne](#code-en-ligne)
+  * [Bloc de code](#bloc-de-code)
+- [Tableaux](#tableaux)
+- [Images ?](#images-)
+- [Les choses ne s'affichent pas comme prévues?](#les-choses-ne-saffichent-pas-comme-prévues)
+
+<!-- TOC end -->
+
 # Titres
 
 Tu peux créer des titres en commençant une nouvelle ligne par `#`, puis du texte.
@@ -178,12 +202,6 @@ doit s'écrire
 >
 > — Yui Hirasawa
 ```
-
-# Emojis
-
-Tu peux utiliser des codes pour certains émojis. Par exemple, `:smile:` pour 😄.
-
-Pour voir la liste complète des émojis disponible, lis la [documentation de ShowdownJS (anglais)](https://github.com/showdownjs/showdown/wiki/Emojis).
 
 # Links
 

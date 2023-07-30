@@ -15,7 +15,7 @@ if (process.env.NUMBER_OF_PROXIES === undefined || process.env.NUMBER_OF_PROXIES
 if (process.env.CLIENT_ID === undefined || process.env.CLIENT_ID === "") throw new Error(`Missing CLIENT_ID in ${envFilePath}`);
 if (process.env.CLIENT_SECRET === undefined || process.env.CLIENT_SECRET === "") throw new Error(`Missing CLIENT_SECRET in ${envFilePath}`);
 if ((process.env.LOCAL_IP === "" || process.env.LOCAL_IP === undefined) && envName === "dev") throw new Error(`Invalid local IP with env set to 'dev'!`);
-
+if (process.env.REDIRECT_URI === "" || process.env.REDIRECT_URI === undefined) throw new Error(`Missing REDIRECT_URI in ${envFilePath}`);
 
 export const cfg = {
     localIp: process.env.LOCAL_IP,
@@ -26,7 +26,7 @@ export const cfg = {
     client: {
         id: process.env.CLIENT_ID,
         secret: process.env.CLIENT_SECRET,
-        redirectUri: "https://localhost:3000"
+        redirectUri: process.env.REDIRECT_URI
     },
     directories: {
         translations: resolve(__dirname, "..", "public", "locales", "json"),
